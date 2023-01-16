@@ -77,6 +77,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
               controller: _usernameController,
               cursorColor: Theme.of(context).primaryColor,
               keyboardType: TextInputType.name,
+              autocorrect: false,
               decoration: InputDecoration(
                 hintText: "Username",
                 enabledBorder: UnderlineInputBorder(
