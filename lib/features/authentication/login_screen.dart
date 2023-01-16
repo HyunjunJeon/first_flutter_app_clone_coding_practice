@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
-import 'package:flutter_tiktok_clone/features/authentication/email_screen.dart';
+import 'package:flutter_tiktok_clone/features/authentication/login_form_screen.dart';
 import 'package:flutter_tiktok_clone/features/authentication/widgets/auth_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -12,10 +12,10 @@ class LoginScreen extends StatelessWidget {
     Navigator.of(context).pop(); // Navigator Stack 에서 뺀다는 것
   }
 
-  void _onEmailScreen(BuildContext context) {
+  void _onEmailLoginTap(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const EmailScreen(),
+        builder: (context) => const LoginFormScreen(),
       ),
     );
   }
@@ -50,7 +50,7 @@ class LoginScreen extends StatelessWidget {
               ),
               Gaps.v40,
               GestureDetector(
-                onTap: () => _onEmailScreen(context),
+                onTap: () => _onEmailLoginTap(context),
                 child: const AuthButton(
                   text: "Use phone or email",
                   icon: FaIcon(FontAwesomeIcons.user),
