@@ -11,7 +11,19 @@ class LoginFormScreen extends StatefulWidget {
 }
 
 class _LoginFormScreenState extends State<LoginFormScreen> {
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  Map<String, String> formData = {};
+
+  void _onSubmitTap() {
+    if (_formKey.currentState != null) {
+      if (_formKey.currentState!.validate()) {
+        // Validator 를 동작시킴
+        _formKey.currentState!.save();
+        print(formData);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +56,12 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
                   ),
                 ),
                 validator: (value) {
-                  return "I don't like your email";
+                  // TODO validation rule 작성
+                  return null;
+                },
+                onSaved: (newValue) => {
+                  if (newValue != null)
+                    {formData['email'] = newValue.replaceAll(" ", "")}
                 },
               ),
               Gaps.v16,
@@ -64,9 +81,20 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
                     ),
                   ),
                 ),
+                validator: (value) {
+                  // TODO validation rule 작성
+                  return null;
+                },
+                onSaved: (newValue) => {
+                  if (newValue != null)
+                    {formData['password'] = newValue.replaceAll(" ", "")}
+                },
               ),
               Gaps.v28,
-              const FormButton(disabled: false, buttonText: "Next"),
+              GestureDetector(
+                onTap: _onSubmitTap,
+                child: const FormButton(disabled: false, buttonText: "Next"),
+              ),
             ],
           ),
         ),

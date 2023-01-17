@@ -9,6 +9,7 @@ class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   void _onSignUpTap(BuildContext context) {
+    // Production 에서는 사용하지 않을 것
     Navigator.of(context).pop(); // Navigator Stack 에서 뺀다는 것
   }
 
