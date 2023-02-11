@@ -39,43 +39,26 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: screens[_selectedIndex],
-      // Material Design 2 버전의 스펙을 지원하는 방식의 코드
-      bottomNavigationBar: BottomNavigationBar(
-        // 4개 이상 items 면 자동 활성화, 그 이하에선 강제로 활성화도 가능
-        type: BottomNavigationBarType.shifting,
-        currentIndex: _selectedIndex,
-        onTap: _onTap,
-        // selectedItemColor: Theme.of(context).primaryColor,
-        items: const [
-          BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.house),
+      // Material Design 3 버전의 스펙을 지원하는 방식의 코드
+      bottomNavigationBar: NavigationBar(
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: _onTap,
+        destinations: const [
+          NavigationDestination(
+            icon: FaIcon(
+              FontAwesomeIcons.house,
+              color: Colors.white,
+            ),
             label: "Home",
-            tooltip: "What are you?",
-            backgroundColor: Colors.pink,
           ),
-          BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
+          NavigationDestination(
+            icon: FaIcon(
+              FontAwesomeIcons.magnifyingGlass,
+              color: Colors.white,
+            ),
             label: "Discover",
-            tooltip: "What are you??",
-            backgroundColor: Colors.teal,
           ),
-          BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-            label: "Discover",
-            tooltip: "What are you??",
-            backgroundColor: Colors.amber,
-          ),
-          BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-            label: "Discover",
-            tooltip: "What are you??",
-            backgroundColor: Colors.blue,
-          ),
-          BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-              label: "Discover",
-              tooltip: "What are you??",
-              backgroundColor: Colors.green),
         ],
       ),
     );
