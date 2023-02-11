@@ -21,10 +21,12 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
       if (_formKey.currentState!.validate()) {
         // Validator 를 동작시킴
         _formKey.currentState!.save();
-        Navigator.of(context).push(
+        Navigator.of(context).pushAndRemoveUntil(
+          // Navigator.of(context).push 의 의미는 다른 화면들의 맨 위에 새로운걸 밀어넣는 것 => 유저가 원하면 뒤로 돌아갈 수 있음
           MaterialPageRoute(
             builder: (context) => const InterestsScreen(),
           ),
+          (route) => false, // 이전의 route 정보를 유지할 것인가 말것인가를 bool 로 전달
         );
       }
     }

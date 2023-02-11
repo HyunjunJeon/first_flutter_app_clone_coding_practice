@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
+import 'package:flutter_tiktok_clone/features/main_navigation/main_navigation_screen.dart';
 import 'package:flutter_tiktok_clone/features/onboarding/tutorial_screen_base.dart';
 
 enum Direction { right, left }
@@ -46,8 +47,14 @@ class _TutorialScreenState extends State<TutorialScreen> {
     }
   }
 
-  // TODO
-  void _onPressButton() {}
+  void _onEnterAppTap() {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => const MainNavigationScreen(),
+      ),
+      (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +87,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
               duration: const Duration(milliseconds: 300),
               opacity: _showingPage == Page.first ? Sizes.size0 : Sizes.size1,
               child: CupertinoButton(
-                onPressed: _onPressButton,
+                onPressed: _onEnterAppTap,
                 color: Theme.of(context).primaryColor,
                 child: const Text("Enter the app!"),
               ),
