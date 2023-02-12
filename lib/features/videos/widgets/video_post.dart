@@ -39,7 +39,6 @@ class _VideoPostState extends State<VideoPost>
 
   void _initVideoPlayer() async {
     await _videoPlayerController.initialize();
-    _videoPlayerController.play();
     setState(() {});
     _videoPlayerController.addListener(_onVideoChange);
   }
@@ -56,15 +55,6 @@ class _VideoPostState extends State<VideoPost>
       value: 1.5,
       duration: _animationDuration,
     );
-    _animationController.addListener(() {
-      setState(() {});
-    });
-  }
-
-  @override
-  void dispose() {
-    _videoPlayerController.dispose();
-    super.dispose();
   }
 
   void _onVisibilityChange(VisibilityInfo info) {
@@ -76,14 +66,20 @@ class _VideoPostState extends State<VideoPost>
   void _onTogglePause() {
     if (_videoPlayerController.value.isPlaying) {
       _videoPlayerController.pause();
-      _animationController.reverse();
+      _animationController.reverse(); // 애니메이션 컨트롤러에 정의한 것을 역재생
     } else {
       _videoPlayerController.play();
-      _animationController.forward();
+      _animationController.forward(); // 애니메이션 컨트롤러에 정의한 것을 재생
     }
     setState(() {
       _isPause = !_isPause;
     });
+  }
+
+  @override
+  void dispose() {
+    _videoPlayerController.dispose();
+    super.dispose();
   }
 
   @override
@@ -108,8 +104,15 @@ class _VideoPostState extends State<VideoPost>
           Positioned.fill(
             child: IgnorePointer(
               child: Center(
-                child: Transform.scale(
-                  scale: _animationController.value,
+                child: AnimatedBuilder(
+                  animation: _animationController,
+                  // _animationController 가 이 Builder 를 컨트롤 함
+                  builder: (context, child) {
+                    return Transform.scale(
+                      scale: _animationController.value,
+                      child: child, // 아래에 정의한 child 를 호출
+                    );
+                  },
                   child: AnimatedOpacity(
                     opacity: _isPause ? 1 : 0,
                     duration: _animationDuration,
