@@ -4,6 +4,7 @@ import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
 import 'package:flutter_tiktok_clone/features/main_navigation/widgets/nav_tab.dart';
 import 'package:flutter_tiktok_clone/features/onboarding/widgets/post_video_button.dart';
+import 'package:flutter_tiktok_clone/features/videos/video_timeline_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainNavigationScreen extends StatefulWidget {
@@ -38,45 +39,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     return Scaffold(
       body: Stack(children: [
         Offstage(
-          offstage: _selectedIndex != 0,
-          child: const Text(
-            "Home",
-            style: TextStyle(
-              fontSize: Sizes.size36,
-              color: Colors.black,
-            ),
-          ),
-        ),
-        Offstage(
-          offstage: _selectedIndex != 1,
-          child: const Text(
-            "Discover",
-            style: TextStyle(
-              fontSize: Sizes.size36,
-              color: Colors.black,
-            ),
-          ),
-        ),
-        Offstage(
-          offstage: _selectedIndex != 3,
-          child: const Text(
-            "Inbox",
-            style: TextStyle(
-              fontSize: Sizes.size36,
-              color: Colors.black,
-            ),
-          ),
-        ),
-        Offstage(
-          offstage: _selectedIndex != 4,
-          child: const Text(
-            "Profile",
-            style: TextStyle(
-              fontSize: Sizes.size36,
-              color: Colors.black,
-            ),
-          ),
-        ),
+            offstage: _selectedIndex != 0, child: const VideoTimelineScreen()),
+        Offstage(offstage: _selectedIndex != 1, child: Container()),
+        Offstage(offstage: _selectedIndex != 3, child: Container()),
+        Offstage(offstage: _selectedIndex != 4, child: Container()),
       ]),
       bottomNavigationBar: BottomAppBar(
         color: Colors.black,

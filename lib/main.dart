@@ -14,7 +14,7 @@ class TikTokCloneApp extends StatelessWidget {
     return MaterialApp(
       title: 'TikTok Clone',
       theme: ThemeData(
-        // 최대한 공통이 되는 Theme Data 는 모아두기
+        // 최대한 공통이 되는 Theme Data 는 모아두기(Material Design 에서만 사용 가능)
         primaryColor: const Color(0xFFE9435A),
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
