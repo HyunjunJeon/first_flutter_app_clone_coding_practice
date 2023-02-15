@@ -43,17 +43,32 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
     super.dispose();
   }
 
+  Future<void> _onRefresh() {
+    // onRefresh 는 항상 Future 를 반환해야함
+    return Future.delayed(
+      const Duration(
+        seconds: 5, // 일부러 5초정도 리프레쉬 하는게 있는 것처럼 보여줌
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // 성능을 위해서 그냥 PageView 가 아닌 ListView.builder 처럼 PageView.builder 를 사용
-    return PageView.builder(
-      pageSnapping: true,
-      scrollDirection: Axis.vertical,
-      itemCount: _itemCount,
-      onPageChanged: _onPageChanged,
-      controller: _pageController,
-      itemBuilder: (BuildContext context, int index) =>
-          VideoPost(onVideoFinished: _onVideoFinished, index: index),
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      displacement: 40,
+      edgeOffset: 20,
+      color: Theme.of(context).primaryColor,
+      child: PageView.builder(
+        pageSnapping: true,
+        scrollDirection: Axis.vertical,
+        itemCount: _itemCount,
+        onPageChanged: _onPageChanged,
+        controller: _pageController,
+        itemBuilder: (BuildContext context, int index) =>
+            VideoPost(onVideoFinished: _onVideoFinished, index: index),
+      ),
     );
   }
 }
