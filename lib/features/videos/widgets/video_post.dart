@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
+import 'package:flutter_tiktok_clone/features/videos/widgets/video_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -20,6 +22,7 @@ class VideoPost extends StatefulWidget {
 
 class _VideoPostState extends State<VideoPost>
     with SingleTickerProviderStateMixin {
+  // SingleTickerProviderStateMixin: 위젯이 화면에 보일 때만(current tree) Ticker(시계)를 제공하는데, 이 시계는 매 프레임마다 Animation을 실행시키기 위함
   final VideoPlayerController _videoPlayerController =
       VideoPlayerController.asset("assets/videos/sample_video.MOV");
 
@@ -39,6 +42,7 @@ class _VideoPostState extends State<VideoPost>
 
   void _initVideoPlayer() async {
     await _videoPlayerController.initialize();
+    await _videoPlayerController.setLooping(true); // 반복 재생
     setState(() {});
     _videoPlayerController.addListener(_onVideoChange);
   }
@@ -49,7 +53,7 @@ class _VideoPostState extends State<VideoPost>
     _initVideoPlayer();
 
     _animationController = AnimationController(
-      vsync: this,
+      vsync: this, // 애니메이션 재생을 도와주고, 위젯이 위젯 트리에 있을때만 Ticker 를 유지
       lowerBound: 1.0,
       upperBound: 1.5,
       value: 1.5,
@@ -124,6 +128,67 @@ class _VideoPostState extends State<VideoPost>
                   ),
                 ),
               ),
+            ),
+          ),
+          Positioned(
+            bottom: 30,
+            left: 15,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  "@아이디",
+                  style: TextStyle(
+                    fontSize: Sizes.size20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                Gaps.v10,
+                Text(
+                  "This is my dogs mozzi & moca",
+                  style: TextStyle(
+                    fontSize: Sizes.size16,
+                    color: Colors.white,
+                  ),
+                ),
+                // TODO 해쉬태그 & See more
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 20,
+            right: 10,
+            child: Column(
+              children: const [
+                CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Colors.black,
+                  foregroundImage: NetworkImage(
+                      "https://avatars.githubusercontent.com/u/15343250?v=4"),
+                  child: Text(
+                    "아이디",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Gaps.v24,
+                VideoButton(
+                  icon: FontAwesomeIcons.solidHeart,
+                  text: "2.9M",
+                ),
+                Gaps.v24,
+                VideoButton(
+                  icon: FontAwesomeIcons.solidComment,
+                  text: "33K",
+                ),
+                Gaps.v24,
+                VideoButton(
+                  icon: FontAwesomeIcons.share,
+                  text: "share",
+                ),
+              ],
             ),
           ),
         ],

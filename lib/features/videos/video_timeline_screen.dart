@@ -30,6 +30,7 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
   final PageController _pageController = PageController();
 
   void _onVideoFinished() {
+    return; // 영상이 끝나도 다음 영상으로 넘어가지 않고 멈춤(Youtube Short 와 다르게 Tiktok 은 반복 재생을 함)
     _pageController.nextPage(
       duration: _scrollDuration,
       curve: _scrollCurve,
