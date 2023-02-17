@@ -37,13 +37,25 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false, // Keyboard 가 나타날 때 화면이 줄어드는 것을 막기 위해서
       backgroundColor: _selectedIndex == 0 ? Colors.black : Colors.white,
       body: Stack(children: [
         Offstage(
-            offstage: _selectedIndex != 0, child: const VideoTimelineScreen()),
-        Offstage(offstage: _selectedIndex != 1, child: Container()),
-        Offstage(offstage: _selectedIndex != 3, child: Container()),
-        Offstage(offstage: _selectedIndex != 4, child: Container()),
+          offstage: _selectedIndex != 0,
+          child: const VideoTimelineScreen(),
+        ),
+        Offstage(
+          offstage: _selectedIndex != 1,
+          child: Container(),
+        ),
+        Offstage(
+          offstage: _selectedIndex != 3,
+          child: Container(),
+        ),
+        Offstage(
+          offstage: _selectedIndex != 4,
+          child: Container(),
+        ),
       ]),
       bottomNavigationBar: BottomAppBar(
         color: Colors.black,

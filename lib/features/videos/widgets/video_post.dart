@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
 import 'package:flutter_tiktok_clone/features/videos/widgets/video_button.dart';
+import 'package:flutter_tiktok_clone/features/videos/widgets/video_comments.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -26,7 +27,7 @@ class _VideoPostState extends State<VideoPost>
   final VideoPlayerController _videoPlayerController =
       VideoPlayerController.asset("assets/videos/sample_video.MOV");
 
-  bool _isPause = false;
+  bool _isPaused = false;
   final Duration _animationDuration = const Duration(milliseconds: 150);
 
   late final AnimationController _animationController;
@@ -62,7 +63,9 @@ class _VideoPostState extends State<VideoPost>
   }
 
   void _onVisibilityChange(VisibilityInfo info) {
-    if (info.visibleFraction == 1 && !_videoPlayerController.value.isPlaying) {
+    if (info.visibleFraction == 1 &&
+        !_isPaused &&
+        !_videoPlayerController.value.isPlaying) {
       _videoPlayerController.play();
     }
   }
@@ -76,8 +79,23 @@ class _VideoPostState extends State<VideoPost>
       _animationController.forward(); // 애니메이션 컨트롤러에 정의한 것을 재생
     }
     setState(() {
-      _isPause = !_isPause;
+      _isPaused = !_isPaused;
     });
+  }
+
+  void _onCommentsTap(BuildContext context) async {
+    if (_videoPlayerController.value.isPlaying == true) {
+      _onTogglePause();
+    }
+    await showModalBottomSheet(
+      // 유저가 bottom sheet 를 해제하면 resolved 될 것이기 떄문에 await 사용
+      context: context,
+      // bottom sheet 의 사이즈 컨트롤이 가능해짐(ListView 안에서 쓴다면 무조건 true 를 추천함)
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent, // 부모의 색깔을 받아오도록 함(Scaffold)
+      builder: (context) => const VideoComments(),
+    );
+    _onTogglePause();
   }
 
   @override
@@ -118,7 +136,7 @@ class _VideoPostState extends State<VideoPost>
                     );
                   },
                   child: AnimatedOpacity(
-                    opacity: _isPause ? 1 : 0,
+                    opacity: _isPaused ? 1 : 0,
                     duration: _animationDuration,
                     child: const FaIcon(
                       FontAwesomeIcons.play,
@@ -160,8 +178,8 @@ class _VideoPostState extends State<VideoPost>
             bottom: 20,
             right: 10,
             child: Column(
-              children: const [
-                CircleAvatar(
+              children: [
+                const CircleAvatar(
                   radius: 25,
                   backgroundColor: Colors.black,
                   foregroundImage: NetworkImage(
@@ -174,17 +192,20 @@ class _VideoPostState extends State<VideoPost>
                   ),
                 ),
                 Gaps.v24,
-                VideoButton(
+                const VideoButton(
                   icon: FontAwesomeIcons.solidHeart,
                   text: "2.9M",
                 ),
                 Gaps.v24,
-                VideoButton(
-                  icon: FontAwesomeIcons.solidComment,
-                  text: "33K",
+                GestureDetector(
+                  onTap: () => _onCommentsTap(context),
+                  child: const VideoButton(
+                    icon: FontAwesomeIcons.solidComment,
+                    text: "33K",
+                  ),
                 ),
                 Gaps.v24,
-                VideoButton(
+                const VideoButton(
                   icon: FontAwesomeIcons.share,
                   text: "share",
                 ),
