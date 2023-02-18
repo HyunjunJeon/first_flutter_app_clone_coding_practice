@@ -17,6 +17,10 @@ class TikTokCloneApp extends StatelessWidget {
         // 최대한 공통이 되는 Theme Data 는 모아두기(Material Design 에서만 사용 가능)
         primaryColor: const Color(0xFFE9435A),
         scaffoldBackgroundColor: Colors.white,
+        textSelectionTheme: const TextSelectionThemeData(
+          // CupertinoSearchTextField 의 커서 색깔을 바꾸는 옵션이없는데, 이거는 여기서 바꿔줄 수 있음
+          cursorColor: Color(0xFFE9435A),
+        ),
         appBarTheme: const AppBarTheme(
           // AppBar Theme Data 적용되는 부분
           backgroundColor: Colors.white,
