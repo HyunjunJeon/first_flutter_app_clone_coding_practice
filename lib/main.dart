@@ -21,6 +21,8 @@ class TikTokCloneApp extends StatelessWidget {
           // CupertinoSearchTextField 의 커서 색깔을 바꾸는 옵션이없는데, 이거는 여기서 바꿔줄 수 있음
           cursorColor: Color(0xFFE9435A),
         ),
+        splashColor: Colors.transparent, // Material Splash Color 삭제
+        highlightColor: Colors.transparent,
         appBarTheme: const AppBarTheme(
           // AppBar Theme Data 적용되는 부분
           backgroundColor: Colors.white,
