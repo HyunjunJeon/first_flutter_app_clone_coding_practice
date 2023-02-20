@@ -105,7 +105,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        child: Container(
+        child: SizedBox(
           height: 300,
           child: CupertinoDatePicker(
             maximumDate: initDate.subtract(const Duration(days: 365 * 20)),
