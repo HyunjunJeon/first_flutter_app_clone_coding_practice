@@ -63,6 +63,7 @@ class _VideoPostState extends State<VideoPost>
   }
 
   void _onVisibilityChange(VisibilityInfo info) {
+    if (!mounted) return; // Bug Fix: 위젯이 Mounted 되지 않았다면 이후 과정이 실행되지 않도록
     if (info.visibleFraction == 1 &&
         !_isPaused &&
         !_videoPlayerController.value.isPlaying) {
