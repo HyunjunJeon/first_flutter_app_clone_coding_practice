@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
+import 'package:flutter_tiktok_clone/features/setting/settings_screen.dart';
 import 'package:flutter_tiktok_clone/features/users/widgets/persistent_tabBar.dart';
 import 'package:flutter_tiktok_clone/features/users/widgets/user_profile_information.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,6 +15,14 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
+  void _onGearPressed() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const SettingsScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -26,7 +35,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 title: const Text("JHJ"),
                 actions: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: _onGearPressed,
                     icon: const FaIcon(
                       FontAwesomeIcons.gear,
                       size: Sizes.size20,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
 import 'package:flutter_tiktok_clone/features/inbox/activity_screen.dart';
 import 'package:flutter_tiktok_clone/features/inbox/chats_screen.dart';
@@ -56,6 +57,7 @@ class InboxScreen extends StatelessWidget {
             height: Sizes.size1,
             color: Colors.grey.shade300,
           ),
+          Gaps.v4,
           ListTile(
             leading: Container(
               width: Sizes.size52,
