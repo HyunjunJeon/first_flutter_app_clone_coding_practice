@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
@@ -32,6 +33,8 @@ class _VideoPostState extends State<VideoPost>
 
   late final AnimationController _animationController;
 
+  bool _isMuted = true;
+
   void _onVideoChange() {
     if (_videoPlayerController.value.isInitialized) {
       if (_videoPlayerController.value.duration ==
@@ -42,6 +45,11 @@ class _VideoPostState extends State<VideoPost>
   }
 
   void _initVideoPlayer() async {
+    // WEB 에서 실행될 떄 '음성' 이 있는 영상은 자동재생 되지 않도록 브라우저가 막고 있음(광고 오남용 등 이슈로)
+    // k 를 입력하면 Flutter 가 가지고 있는 많은 Contants 들을 사용할 수 있음
+    if (kIsWeb) {
+      await _videoPlayerController.setVolume(0);
+    }
     await _videoPlayerController.initialize();
     await _videoPlayerController.setLooping(true); // 반복 재생
     setState(() {});
@@ -100,6 +108,20 @@ class _VideoPostState extends State<VideoPost>
       builder: (context) => const VideoComments(),
     );
     _onTogglePause();
+  }
+
+  void _onTapVolume() {
+    if (_videoPlayerController.value.volume == 0) {
+      setState(() {
+        _isMuted = false;
+        _videoPlayerController.setVolume(20);
+      });
+    } else {
+      setState(() {
+        _isMuted = true;
+        _videoPlayerController.setVolume(0);
+      });
+    }
   }
 
   @override
@@ -183,6 +205,16 @@ class _VideoPostState extends State<VideoPost>
             right: 10,
             child: Column(
               children: [
+                GestureDetector(
+                  onTap: _onTapVolume,
+                  child: FaIcon(
+                    _isMuted
+                        ? FontAwesomeIcons.volumeOff
+                        : FontAwesomeIcons.volumeHigh,
+                    color: Colors.white,
+                  ),
+                ),
+                Gaps.v24,
                 const CircleAvatar(
                   radius: 25,
                   backgroundColor: Colors.black,
