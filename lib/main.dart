@@ -56,3 +56,36 @@ class TikTokCloneApp extends StatelessWidget {
     );
   }
 }
+
+// MediaQuery 와 LayoutBuilder 을 테스트 해봄
+class LayoutBuilderCodeLab extends StatelessWidget {
+  const LayoutBuilderCodeLab({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return Scaffold(
+      body: SizedBox(
+        width: size.width / 2,
+        // LayoutBuilder 는 어디에 있는지에 따라 화면의 크기를 알려줄수도, Widget 사이즈를 알려줄 수도 있음
+        // 부모 Widget 의 크기를 알고 싶을 떄 사용하면 좋음, 어느정도 커질 수 있는지 알고 싶을 때
+        child: LayoutBuilder(
+          // LayoutBuilder 는 builder 내에 속한 Widget 의 크기를 나타냄
+          builder: (context, constraints) => Container(
+            // 여기서는 이 Container Widget 이 가질 수 있는 최대 width
+            width: constraints.maxWidth,
+            // 여기서는 이 Container Widget 이 가질 수 있는 최대 height
+            height: constraints.maxHeight,
+            color: Colors.teal,
+            child: Center(
+              child: Text(
+                "${size.width}, ${constraints.maxWidth}",
+                style: const TextStyle(color: Colors.white, fontSize: 100),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
