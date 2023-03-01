@@ -46,18 +46,24 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false, // 키보드가 나오더라도 리사이징 되지 않도록
         appBar: AppBar(
-          title: CupertinoSearchTextField(
-            prefixIcon: const Icon(
-              CupertinoIcons.search,
-              color: Colors.black,
+          title: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: Breakpoints.sm,
             ),
-            suffixIcon: const Icon(
-              CupertinoIcons.xmark_circle_fill,
-              color: Colors.grey,
+            // WEB 에서 SearchTextField 가 너무 커지기 때문에 ConstrainedBox(Container 를 사용한다면 굳이 이 위젯을 안써도 constraint field 가 있음)
+            child: CupertinoSearchTextField(
+              prefixIcon: const Icon(
+                CupertinoIcons.search,
+                color: Colors.black,
+              ),
+              suffixIcon: const Icon(
+                CupertinoIcons.xmark_circle_fill,
+                color: Colors.grey,
+              ),
+              onChanged: _onSearchChanged,
+              onSubmitted: _onSearchSubmitted,
+              controller: _textEditingController,
             ),
-            onChanged: _onSearchChanged,
-            onSubmitted: _onSearchSubmitted,
-            controller: _textEditingController,
           ),
           elevation: 1, // 회색 줄 보여주기
           bottom: TabBar(
