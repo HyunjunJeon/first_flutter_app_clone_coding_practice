@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
-import 'package:flutter_tiktok_clone/features/main_navigation/main_navigation_screen.dart';
+import 'package:flutter_tiktok_clone/features/authentication/sign_up_screen.dart';
 
 void main() async {
   // 꼭 main 의 runApp 이전에 쓰여야함
@@ -30,10 +30,12 @@ class TikTokCloneApp extends StatelessWidget {
       // iOS Emulator 에서 debug 글자 안보이게
       debugShowCheckedModeBanner: false,
       title: 'TikTok Clone',
+      themeMode: ThemeMode.system, // light vs dart Mode 결정하는 것을 기기의 환경에 맞춤
       theme: ThemeData(
         // 최대한 공통이 되는 Theme Data 는 모아두기(Material Design 에서만 사용 가능)
-        primaryColor: const Color(0xFFE9435A),
+        brightness: Brightness.light,
         scaffoldBackgroundColor: Colors.white,
+        primaryColor: const Color(0xFFE9435A),
         textSelectionTheme: const TextSelectionThemeData(
           // CupertinoSearchTextField 의 커서 색깔을 바꾸는 옵션이없는데, 이거는 여기서 바꿔줄 수 있음
           cursorColor: Color(0xFFE9435A),
@@ -51,8 +53,20 @@ class TikTokCloneApp extends StatelessWidget {
             fontSize: Sizes.size20,
           ),
         ),
+        bottomAppBarTheme: BottomAppBarTheme(
+          // 앱 전체에 적용되게끔 공통 설정을 해줄 수도 있고
+          color: Colors.grey.shade50,
+        ),
       ),
-      home: const MainNavigationScreen(),
+      darkTheme: ThemeData(
+        scaffoldBackgroundColor: Colors.black,
+        primaryColor: const Color(0xFFE9435A),
+        brightness: Brightness.dark, // Text Widget 의 기본 색깔이 바뀜
+        bottomAppBarTheme: BottomAppBarTheme(
+          color: Colors.grey.shade800,
+        ),
+      ), // darkMode ThemeData 를 구성
+      home: const SignUpScreen(),
     );
   }
 }
