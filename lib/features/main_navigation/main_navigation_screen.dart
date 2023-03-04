@@ -7,6 +7,7 @@ import 'package:flutter_tiktok_clone/features/main_navigation/widgets/nav_tab.da
 import 'package:flutter_tiktok_clone/features/onboarding/widgets/post_video_button.dart';
 import 'package:flutter_tiktok_clone/features/users/user_profile_screen.dart';
 import 'package:flutter_tiktok_clone/features/videos/video_timeline_screen.dart';
+import 'package:flutter_tiktok_clone/utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainNavigationScreen extends StatefulWidget {
@@ -38,6 +39,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = isDarkMode(context);
     return Scaffold(
       resizeToAvoidBottomInset: false, // Keyboard 가 나타날 때 화면이 줄어드는 것을 막기 위해서
       backgroundColor: _selectedIndex == 0 ? Colors.black : Colors.white,
@@ -60,7 +62,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         ),
       ]),
       bottomNavigationBar: BottomAppBar(
-        color: _selectedIndex == 0 ? Colors.black : Colors.white,
+        color: _selectedIndex == 0 || isDark ? Colors.black : Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(Sizes.size12),
           child: Row(

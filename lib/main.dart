@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
-import 'package:flutter_tiktok_clone/features/authentication/sign_up_screen.dart';
+import 'package:flutter_tiktok_clone/features/main_navigation/main_navigation_screen.dart';
 
 void main() async {
   // 꼭 main 의 runApp 이전에 쓰여야함
@@ -58,6 +58,12 @@ class TikTokCloneApp extends StatelessWidget {
           color: Colors.grey.shade50,
         ),
         textTheme: Typography.blackMountainView,
+        tabBarTheme: TabBarTheme(
+          labelColor: Colors.black,
+          unselectedLabelColor: Colors.grey.shade500,
+          // Flutter 버전을 3.3.10 => 3.7.6 으로 업그레이드 했음
+          indicatorColor: Colors.black,
+        ),
         // textTheme: GoogleFonts.itimTextTheme(),
         // https://m2.material.io/design/typography/the-type-system.html#type-scale
         // textTheme: TextTheme(
@@ -99,6 +105,10 @@ class TikTokCloneApp extends StatelessWidget {
         bottomAppBarTheme: BottomAppBarTheme(
           color: Colors.grey.shade800,
         ),
+        textSelectionTheme: const TextSelectionThemeData(
+          // CupertinoSearchTextField 의 커서 색깔을 바꾸는 옵션이없는데, 이거는 여기서 바꿔줄 수 있음
+          cursorColor: Color(0xFFE9435A),
+        ),
         textTheme: Typography.whiteMountainView,
         // textTheme: GoogleFonts.itimTextTheme(
         //   ThemeData(
@@ -108,8 +118,11 @@ class TikTokCloneApp extends StatelessWidget {
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.grey.shade900,
         ),
+        tabBarTheme: const TabBarTheme(
+          indicatorColor: Colors.white,
+        ),
       ), // darkMode ThemeData 를 구성
-      home: const SignUpScreen(),
+      home: const MainNavigationScreen(),
     );
   }
 }

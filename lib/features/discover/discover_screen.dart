@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/constant/breakpoints.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
+import 'package:flutter_tiktok_clone/utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 final tabs = [
@@ -52,9 +53,11 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             ),
             // WEB 에서 SearchTextField 가 너무 커지기 때문에 ConstrainedBox(Container 를 사용한다면 굳이 이 위젯을 안써도 constraint field 가 있음)
             child: CupertinoSearchTextField(
+              style: TextStyle(
+                color: isDarkMode(context) ? Colors.white : Colors.black,
+              ),
               prefixIcon: const Icon(
                 CupertinoIcons.search,
-                color: Colors.black,
               ),
               suffixIcon: const Icon(
                 CupertinoIcons.xmark_circle_fill,
@@ -68,9 +71,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           elevation: 1, // 회색 줄 보여주기
           bottom: TabBar(
             onTap: (value) => FocusManager.instance.primaryFocus?.unfocus(),
-            unselectedLabelColor: Colors.grey.shade500,
-            labelColor: Colors.black,
-            indicatorColor: Colors.black,
+            indicatorColor: Theme.of(context).tabBarTheme.indicatorColor,
             labelStyle: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: Sizes.size16,
@@ -123,8 +124,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                         ),
                       ),
                       Gaps.v10,
-                      Text(
-                        "${constraints.maxWidth}This is a very long caption for my tiktok that i'm upload just now currently.",
+                      const Text(
+                        "This is a very long caption for my tiktok that i'm upload just now currently.",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -133,11 +134,13 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                         ),
                       ),
                       Gaps.v4,
-                      if (!(constraints.maxWidth > 143 &&
-                          constraints.maxWidth < 200))
+                      if (!(constraints.maxWidth > 190 &&
+                          constraints.maxWidth < 250))
                         DefaultTextStyle(
                           style: TextStyle(
-                            color: Colors.grey.shade600,
+                            color: isDarkMode(context)
+                                ? Colors.grey.shade300
+                                : Colors.grey.shade600,
                             fontWeight: FontWeight.w600,
                           ),
                           child: Row(
