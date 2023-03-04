@@ -105,6 +105,9 @@ class TikTokCloneApp extends StatelessWidget {
         //     brightness: Brightness.dark,
         //   ).textTheme,
         // ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.grey.shade900,
+        ),
       ), // darkMode ThemeData 를 구성
       home: const SignUpScreen(),
     );
