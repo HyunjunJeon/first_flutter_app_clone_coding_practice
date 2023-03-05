@@ -42,7 +42,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     final bool isDark = isDarkMode(context);
     return Scaffold(
       resizeToAvoidBottomInset: false, // Keyboard 가 나타날 때 화면이 줄어드는 것을 막기 위해서
-      backgroundColor: _selectedIndex == 0 ? Colors.black : Colors.white,
+      backgroundColor:
+          _selectedIndex == 0 || isDark ? Colors.black : Colors.white,
       body: Stack(children: [
         Offstage(
           offstage: _selectedIndex != 0,

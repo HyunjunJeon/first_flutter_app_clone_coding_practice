@@ -64,6 +64,9 @@ class TikTokCloneApp extends StatelessWidget {
           // Flutter 버전을 3.3.10 => 3.7.6 으로 업그레이드 했음
           indicatorColor: Colors.black,
         ),
+        listTileTheme: const ListTileThemeData(
+          iconColor: Colors.black,
+        ),
         // textTheme: GoogleFonts.itimTextTheme(),
         // https://m2.material.io/design/typography/the-type-system.html#type-scale
         // textTheme: TextTheme(

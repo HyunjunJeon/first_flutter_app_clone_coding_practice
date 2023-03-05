@@ -63,8 +63,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                 child: Text("jhj"),
               ),
               Positioned(
-                bottom: -2,
-                right: -2,
+                bottom: 0,
+                right: 0,
                 child: Container(
                   width: Sizes.size18,
                   height: Sizes.size18,
