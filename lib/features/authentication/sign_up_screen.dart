@@ -9,7 +9,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
 class SignUpScreen extends StatelessWidget {
-  static String routeName = "/";
+  static const String routeURL = "/";
+  static const String routeName = "signUp";
 
   const SignUpScreen({Key? key}) : super(key: key);
 
@@ -61,7 +62,8 @@ class SignUpScreen extends StatelessWidget {
     // Navigator.of(context).pushNamed(UsernameScreen.routeName);
 
     // Navigator V2
-    context.push(UsernameScreen.routeName);
+    // context.push(UsernameScreen.routeName);
+    context.pushNamed(UsernameScreen.routeName);
     // context.push("/users/jhj2?show=likes");
   }
 
