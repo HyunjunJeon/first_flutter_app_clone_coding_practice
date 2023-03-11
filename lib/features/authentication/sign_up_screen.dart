@@ -6,9 +6,11 @@ import 'package:flutter_tiktok_clone/features/authentication/username_screen.dar
 import 'package:flutter_tiktok_clone/features/authentication/widgets/auth_button.dart';
 import 'package:flutter_tiktok_clone/utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpScreen extends StatelessWidget {
   static String routeName = "/";
+
   const SignUpScreen({Key? key}) : super(key: key);
 
   void _onLoginTap(BuildContext context) async {
@@ -19,8 +21,10 @@ class SignUpScreen extends StatelessWidget {
     //   ),
     // );
     // print("user came back.");
-    final result = await Navigator.of(context).pushNamed(LoginScreen.routeName);
-    print(result);
+    // Navigator V1 확장
+    // await Navigator.of(context).pushNamed(LoginScreen.routeName);
+    // print(result);
+    context.push(LoginScreen.routeName);
   }
 
   void _onEmailTap(BuildContext context) {
@@ -53,7 +57,12 @@ class SignUpScreen extends StatelessWidget {
     //     },
     //   ),
     // );
-    Navigator.of(context).pushNamed(UsernameScreen.routeName);
+    // Navigator V1 확장
+    // Navigator.of(context).pushNamed(UsernameScreen.routeName);
+
+    // Navigator V2
+    context.push(UsernameScreen.routeName);
+    // context.push("/users/jhj2?show=likes");
   }
 
   @override

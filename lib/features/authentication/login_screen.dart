@@ -5,14 +5,17 @@ import 'package:flutter_tiktok_clone/features/authentication/login_form_screen.d
 import 'package:flutter_tiktok_clone/features/authentication/widgets/auth_button.dart';
 import 'package:flutter_tiktok_clone/utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatelessWidget {
   static String routeName = "/login";
+
   const LoginScreen({Key? key}) : super(key: key);
 
   void _onSignUpTap(BuildContext context) {
     // Production 에서는 사용하지 않을 것
-    Navigator.of(context).pop(); // Navigator Stack 에서 뺀다는 것
+    // Navigator.of(context).pop(); // Navigator Stack 에서 뺀다는 것
+    context.pop();
   }
 
   void _onEmailLoginTap(BuildContext context) {
@@ -35,7 +38,7 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             children: [
               Gaps.v80,
-              Text(
+              const Text(
                 "Login for Tiktok",
                 style: TextStyle(
                   fontSize: Sizes.size24,

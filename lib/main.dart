@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
-import 'package:flutter_tiktok_clone/features/authentication/email_screen.dart';
-import 'package:flutter_tiktok_clone/features/authentication/login_screen.dart';
-import 'package:flutter_tiktok_clone/features/authentication/sign_up_screen.dart';
-import 'package:flutter_tiktok_clone/features/authentication/username_screen.dart';
+import 'package:flutter_tiktok_clone/router.dart';
 
 void main() async {
   // 꼭 main 의 runApp 이전에 쓰여야함
@@ -29,11 +26,12 @@ class TikTokCloneApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       // iOS Emulator 에서 debug 글자 안보이게
       debugShowCheckedModeBanner: false,
       title: 'TikTok Clone',
-      themeMode: ThemeMode.system, // light vs dart Mode 결정하는 것을 기기의 환경에 맞춤
+      themeMode: ThemeMode.system,
+      // light vs dart Mode 결정하는 것을 기기의 환경에 맞춤
       theme: ThemeData(
         // Material3 를 사용하게끔 강제하는 것(2023.03 기준 아직도 마이그 진행중이라 임시기능 임)
         // BottomAppBar 부분이 주로 망가지는데(M2 -> M3 로 가면서 바뀐게 많아서) 고쳐야 할 게 많음...
@@ -46,7 +44,8 @@ class TikTokCloneApp extends StatelessWidget {
           // CupertinoSearchTextField 의 커서 색깔을 바꾸는 옵션이없는데, 이거는 여기서 바꿔줄 수 있음
           cursorColor: Color(0xFFE9435A),
         ),
-        splashColor: Colors.transparent, // Material Splash Color 삭제
+        splashColor: Colors.transparent,
+        // Material Splash Color 삭제
         highlightColor: Colors.transparent,
         appBarTheme: const AppBarTheme(
           // AppBar Theme Data 적용되는 부분
@@ -111,7 +110,8 @@ class TikTokCloneApp extends StatelessWidget {
         useMaterial3: false,
         scaffoldBackgroundColor: Colors.black,
         primaryColor: const Color(0xFFE9435A),
-        brightness: Brightness.dark, // Text Widget 의 기본 색깔이 바뀜
+        brightness: Brightness.dark,
+        // Text Widget 의 기본 색깔이 바뀜
         bottomAppBarTheme: BottomAppBarTheme(
           color: Colors.grey.shade800,
         ),
@@ -131,15 +131,10 @@ class TikTokCloneApp extends StatelessWidget {
         tabBarTheme: const TabBarTheme(
           indicatorColor: Colors.white,
         ),
-      ), // darkMode ThemeData 를 구성
+      ),
+      // darkMode ThemeData 를 구성
       // Navigator 2 를 사용하면서 이제 Home 은 필요 없어짐.
-      initialRoute: SignUpScreen.routeName,
-      routes: {
-        SignUpScreen.routeName: (context) => const SignUpScreen(),
-        UsernameScreen.routeName: (context) => const UsernameScreen(),
-        LoginScreen.routeName: (context) => const LoginScreen(),
-        EmailScreen.routeName: (context) => const EmailScreen(),
-      },
+      routerConfig: router,
       // home: const SignUpScreen(),
     );
   }

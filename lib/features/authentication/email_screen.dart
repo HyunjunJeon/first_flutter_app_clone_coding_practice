@@ -7,14 +7,17 @@ import 'package:flutter_tiktok_clone/features/authentication/widgets/form_button
 class EmailScreenArgs {
   final String username;
 
-  EmailScreenArgs(this.username);
+  EmailScreenArgs({required this.username});
 }
 
 class EmailScreen extends StatefulWidget {
   static String routeName = "/email";
 
+  final String username;
+
   const EmailScreen({
     Key? key,
+    required this.username,
   }) : super(key: key);
 
   @override
@@ -69,8 +72,8 @@ class _EmailScreenState extends State<EmailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments
-        as EmailScreenArgs; // as 를 써넣어줌으로써 어떤 값이 있는지 자동완성을 지원함
+    // as 를 써넣어줌으로써 어떤 값이 있는지 자동완성을 지원함
+    // final args = ModalRoute.of(context)!.settings.arguments as EmailScreenArgs;
     return GestureDetector(
       onTap: _onScaffoldTap,
       child: Scaffold(
@@ -88,7 +91,7 @@ class _EmailScreenState extends State<EmailScreen> {
             children: [
               Gaps.v10,
               Text(
-                "What is your email, ${args.username}?",
+                "What is your email, ${widget.username}?",
                 style: const TextStyle(
                   fontSize: Sizes.size24,
                   fontWeight: FontWeight.w700,
