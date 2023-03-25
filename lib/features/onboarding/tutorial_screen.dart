@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
-import 'package:flutter_tiktok_clone/features/main_navigation/main_navigation_screen.dart';
 import 'package:flutter_tiktok_clone/features/onboarding/tutorial_screen_base.dart';
 import 'package:flutter_tiktok_clone/utils.dart';
+import 'package:go_router/go_router.dart';
 
 enum Direction { right, left }
 
@@ -49,12 +49,17 @@ class _TutorialScreenState extends State<TutorialScreen> {
   }
 
   void _onEnterAppTap() {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => const MainNavigationScreen(),
-      ),
-      (route) => false,
-    );
+    // Navigator.of(context).pushAndRemoveUntil(
+    //   MaterialPageRoute(
+    //     builder: (context) => const MainNavigationScreen(),
+    //   ),
+    //   (route) => false,
+    // );
+    /*
+        push: 데이터 등을 스택 위에 추가함 (뒤로 가기 등이 가능)
+        go: 경로가 아예 바뀌어 버리고, 화면 스택을 교체해버린다는 뜻
+     */
+    context.go("/home");
   }
 
   @override

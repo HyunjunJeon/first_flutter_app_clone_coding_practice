@@ -25,7 +25,7 @@ class SignUpScreen extends StatelessWidget {
     // Navigator V1 확장
     // await Navigator.of(context).pushNamed(LoginScreen.routeName);
     // print(result);
-    context.push(LoginScreen.routeName);
+    context.pushNamed(LoginScreen.routeName);
   }
 
   void _onEmailTap(BuildContext context) {
@@ -63,8 +63,15 @@ class SignUpScreen extends StatelessWidget {
 
     // Navigator V2
     // context.push(UsernameScreen.routeName);
-    context.pushNamed(UsernameScreen.routeName);
+    // context.pushNamed(UsernameScreen.routeName);
     // context.push("/users/jhj2?show=likes");
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const UsernameScreen(),
+      ),
+    );
   }
 
   @override

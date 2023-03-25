@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import '../../../constant/gaps.dart';
 
 class NavTab extends StatelessWidget {
   const NavTab({

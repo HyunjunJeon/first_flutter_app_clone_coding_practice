@@ -4,7 +4,12 @@ import 'package:flutter_tiktok_clone/constant/sizes.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ChatDetailScreen extends StatefulWidget {
-  const ChatDetailScreen({Key? key}) : super(key: key);
+  static const String routeName = "chatDetail";
+  static const String routeURL = ":chatId";
+
+  final String chatId;
+
+  const ChatDetailScreen({Key? key, required this.chatId}) : super(key: key);
 
   @override
   State<ChatDetailScreen> createState() => _ChatDetailScreenState();
@@ -82,9 +87,9 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               ),
             ],
           ),
-          title: const Text(
-            "jhj",
-            style: TextStyle(
+          title: Text(
+            "jhj (${widget.chatId})",
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
             ),
           ),

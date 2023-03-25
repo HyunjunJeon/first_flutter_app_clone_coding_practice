@@ -3,38 +3,52 @@ import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
 import 'package:flutter_tiktok_clone/features/discover/discover_screen.dart';
 import 'package:flutter_tiktok_clone/features/inbox/inbox_screen.dart';
-import 'package:flutter_tiktok_clone/features/main_navigation/widgets/nav_tab.dart';
 import 'package:flutter_tiktok_clone/features/onboarding/widgets/post_video_button.dart';
 import 'package:flutter_tiktok_clone/features/users/user_profile_screen.dart';
+import 'package:flutter_tiktok_clone/features/videos/video_recording_screen.dart';
 import 'package:flutter_tiktok_clone/features/videos/video_timeline_screen.dart';
 import 'package:flutter_tiktok_clone/utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
+
+import 'widgets/nav_tab.dart';
+
+enum NavigationTab { home, discover, inbox, profile }
 
 class MainNavigationScreen extends StatefulWidget {
-  const MainNavigationScreen({Key? key}) : super(key: key);
+  static const String routeName = "mainNavigation";
+
+  final NavigationTab tab;
+
+  const MainNavigationScreen({
+    Key? key,
+    required this.tab,
+  }) : super(key: key);
 
   @override
   State<MainNavigationScreen> createState() => _MainNavigationScreenState();
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _selectedIndex = 1;
+  late NavigationTab _selectedTab = widget.tab;
 
-  void _onTap(int idx) {
+  void _onTap(NavigationTab selectedTab) {
+    context.go("/${selectedTab.name}");
     setState(() {
-      _selectedIndex = idx;
+      _selectedTab = selectedTab;
     });
   }
 
   void _onPostVideoButtonTap() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          appBar: AppBar(title: const Text("Record Videos")),
-        ),
-        fullscreenDialog: true,
-      ),
-    );
+    // Navigator.of(context).push(
+    //   MaterialPageRoute(
+    //     builder: (context) => Scaffold(
+    //       appBar: AppBar(title: const Text("Record Videos")),
+    //     ),
+    //     fullscreenDialog: true,
+    //   ),
+    // );
+    context.pushNamed(VideoRecodingScreen.routeName);
   }
 
   @override
@@ -42,23 +56,24 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     final bool isDark = isDarkMode(context);
     return Scaffold(
       resizeToAvoidBottomInset: false, // Keyboard 가 나타날 때 화면이 줄어드는 것을 막기 위해서
-      backgroundColor:
-          _selectedIndex == 0 || isDark ? Colors.black : Colors.white,
+      backgroundColor: _selectedTab == NavigationTab.home || isDark
+          ? Colors.black
+          : Colors.white,
       body: Stack(children: [
         Offstage(
-          offstage: _selectedIndex != 0,
+          offstage: _selectedTab != NavigationTab.home,
           child: const VideoTimelineScreen(),
         ),
         Offstage(
-          offstage: _selectedIndex != 1,
+          offstage: _selectedTab != NavigationTab.discover,
           child: const DiscoverScreen(),
         ),
         Offstage(
-          offstage: _selectedIndex != 3,
+          offstage: _selectedTab != NavigationTab.inbox,
           child: const InboxScreen(),
         ),
         Offstage(
-          offstage: _selectedIndex != 4,
+          offstage: _selectedTab != NavigationTab.profile,
           child: const UserProfileScreen(
             username: "sample",
             tab: "",
@@ -66,51 +81,51 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         ),
       ]),
       bottomNavigationBar: BottomAppBar(
-        color: _selectedIndex == 0 || isDark ? Colors.black : Colors.white,
+        color: _selectedTab.index == 0 || isDark ? Colors.black : Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(Sizes.size12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               NavTab(
-                text: "Home",
-                isSelected: _selectedIndex == 0,
+                text: NavigationTab.home.name,
+                isSelected: _selectedTab == NavigationTab.home,
                 icon: FontAwesomeIcons.house,
                 selectedIcon: FontAwesomeIcons.house,
-                onTap: () => _onTap(0),
-                selectedIndex: _selectedIndex,
+                onTap: () => _onTap(NavigationTab.home),
+                selectedIndex: _selectedTab.index,
               ),
               NavTab(
-                text: "Discover",
-                isSelected: _selectedIndex == 1,
+                text: NavigationTab.discover.name,
+                isSelected: _selectedTab == NavigationTab.discover,
                 icon: FontAwesomeIcons.magnifyingGlass,
                 selectedIcon: FontAwesomeIcons.compass,
-                onTap: () => _onTap(1),
-                selectedIndex: _selectedIndex,
+                onTap: () => _onTap(NavigationTab.discover),
+                selectedIndex: _selectedTab.index,
               ),
               Gaps.h24,
               GestureDetector(
                 onTap: _onPostVideoButtonTap,
                 child: PostVideoButton(
-                  inverted: _selectedIndex != 0,
+                  inverted: _selectedTab != NavigationTab.home,
                 ),
               ),
               Gaps.h24,
               NavTab(
-                text: "Inbox",
-                isSelected: _selectedIndex == 3,
+                text: NavigationTab.inbox.name,
+                isSelected: _selectedTab == NavigationTab.inbox,
                 icon: FontAwesomeIcons.message,
                 selectedIcon: FontAwesomeIcons.solidMessage,
-                onTap: () => _onTap(3),
-                selectedIndex: _selectedIndex,
+                onTap: () => _onTap(NavigationTab.inbox),
+                selectedIndex: _selectedTab.index,
               ),
               NavTab(
-                text: "Profile",
-                isSelected: _selectedIndex == 4,
+                text: NavigationTab.profile.name,
+                isSelected: _selectedTab == NavigationTab.profile,
                 icon: FontAwesomeIcons.user,
                 selectedIcon: FontAwesomeIcons.solidUser,
-                onTap: () => _onTap(4),
-                selectedIndex: _selectedIndex,
+                onTap: () => _onTap(NavigationTab.profile),
+                selectedIndex: _selectedTab.index,
               ),
             ],
           ),

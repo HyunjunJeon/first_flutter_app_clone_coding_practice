@@ -1,13 +1,20 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
 import 'package:flutter_tiktok_clone/features/videos/video_preview_screen.dart';
+import 'package:flutter_tiktok_clone/utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class VideoRecodingScreen extends StatefulWidget {
+  static const String routeName = "postVideo";
+  static const String routeURL = "/upload-video";
+
   const VideoRecodingScreen({Key? key}) : super(key: key);
 
   @override
@@ -21,6 +28,8 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   bool _isSelfieMode = false;
   bool _isFlashMode = false;
   bool _isFlashLightMode = false;
+
+  late final bool _noCamera = kDebugMode && Platform.isIOS;
 
   late CameraController _cameraController;
 
@@ -78,7 +87,13 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   @override
   void initState() {
     super.initState();
-    initPermissions();
+    if (!_noCamera) {
+      initPermissions();
+    } else {
+      setState(() {
+        _hasPermission = true;
+      });
+    }
     // Mixin 에 WidgetBindingObserver 추가 후 사용 가능
     WidgetsBinding.instance.addObserver(this);
     _progressAnimationController.addListener(() {
@@ -177,7 +192,7 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   @override
   void dispose() {
     _buttonAnimationController.dispose();
-    _cameraController.dispose();
+    if (!_noCamera) _cameraController.dispose();
     _progressAnimationController.dispose();
     super.dispose();
   }
@@ -198,11 +213,12 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = isDarkMode(context);
     return Scaffold(
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
-          child: !_hasPermission || !_cameraController.value.isInitialized
+          child: !_hasPermission
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -221,43 +237,52 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
               : Stack(
                   alignment: Alignment.center,
                   children: [
-                    CameraPreview(_cameraController),
-                    // Positioned 는 Stack 내에서 child 를 독립적으로 이동시키는 방법
+                    if (!_noCamera && _cameraController.value.isInitialized)
+                      CameraPreview(_cameraController),
                     Positioned(
-                      top: Sizes.size48,
-                      right: Sizes.size10,
-                      child: Column(
-                        children: [
-                          IconButton(
-                            color: Colors.white,
-                            onPressed: toggleSelfieMode,
-                            icon: const Icon(
-                              Icons.cameraswitch,
-                            ),
-                          ),
-                          Gaps.v10,
-                          IconButton(
-                            color: _isFlashMode
-                                ? Colors.amber.shade200
-                                : Colors.white,
-                            onPressed: toggleFlashMode,
-                            icon: Icon(_isFlashMode
-                                ? Icons.flash_on_rounded
-                                : Icons.flash_off_rounded),
-                          ),
-                          Gaps.v10,
-                          IconButton(
-                            color: _isFlashLightMode
-                                ? Colors.amber.shade200
-                                : Colors.white,
-                            onPressed: toggleFlashLight,
-                            icon: Icon(_isFlashLightMode
-                                ? Icons.flashlight_on
-                                : Icons.flashlight_off),
-                          ),
-                        ],
+                      top: Sizes.size20,
+                      left: Sizes.size20,
+                      child: CloseButton(
+                        color: isDark ? Colors.white : Colors.black,
                       ),
                     ),
+                    // Positioned 는 Stack 내에서 child 를 독립적으로 이동시키는 방법
+                    if (!_noCamera)
+                      Positioned(
+                        top: Sizes.size48,
+                        right: Sizes.size10,
+                        child: Column(
+                          children: [
+                            IconButton(
+                              color: Colors.white,
+                              onPressed: toggleSelfieMode,
+                              icon: const Icon(
+                                Icons.cameraswitch,
+                              ),
+                            ),
+                            Gaps.v10,
+                            IconButton(
+                              color: _isFlashMode
+                                  ? Colors.amber.shade200
+                                  : Colors.white,
+                              onPressed: toggleFlashMode,
+                              icon: Icon(_isFlashMode
+                                  ? Icons.flash_on_rounded
+                                  : Icons.flash_off_rounded),
+                            ),
+                            Gaps.v10,
+                            IconButton(
+                              color: _isFlashLightMode
+                                  ? Colors.amber.shade200
+                                  : Colors.white,
+                              onPressed: toggleFlashLight,
+                              icon: Icon(_isFlashLightMode
+                                  ? Icons.flashlight_on
+                                  : Icons.flashlight_off),
+                            ),
+                          ],
+                        ),
+                      ),
                     Positioned(
                       bottom: Sizes.size40,
                       width: MediaQuery.of(context).size.width,

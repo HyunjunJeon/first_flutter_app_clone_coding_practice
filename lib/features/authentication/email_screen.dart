@@ -11,8 +11,8 @@ class EmailScreenArgs {
 }
 
 class EmailScreen extends StatefulWidget {
-  static const String routeURL = "email";
-  static const String routeName = "email_screen";
+  // static const String routeURL = "email";
+  // static const String routeName = "email_screen";
 
   final String username;
 

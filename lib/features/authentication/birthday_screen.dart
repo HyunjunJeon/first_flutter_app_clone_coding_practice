@@ -4,6 +4,7 @@ import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
 import 'package:flutter_tiktok_clone/features/authentication/widgets/form_button.dart';
 import 'package:flutter_tiktok_clone/features/onboarding/interests_screen.dart';
+import 'package:go_router/go_router.dart';
 
 class BirthdayScreen extends StatefulWidget {
   const BirthdayScreen({Key? key}) : super(key: key);
@@ -30,12 +31,14 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   }
 
   void _onNextTap() {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => const InterestsScreen(),
-      ),
-      (route) => false,
-    );
+    // Navigator.of(context).pushAndRemoveUntil(
+    //   MaterialPageRoute(
+    //     builder: (context) => const InterestsScreen(),
+    //   ),
+    //   (route) => false,
+    // );
+    context.pushReplacementNamed(InterestsScreen
+        .routeName); // Push 는 되지만 뒤로 갈 수 없도록 - pushReplacementNamed 를 사용함
   }
 
   void _setTextFieldDate(DateTime date) {
