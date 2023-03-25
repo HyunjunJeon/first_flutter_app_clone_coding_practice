@@ -15,7 +15,7 @@ class VideoRecodingScreen extends StatefulWidget {
 }
 
 class _VideoRecodingScreenState extends State<VideoRecodingScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   // SingleTickerProviderStateMixin 을 주로 썻었는데, 여기서는 Animation 을 2개 이상 다룰꺼기 때문에..
   bool _hasPermission = false;
   bool _isSelfieMode = false;
@@ -57,7 +57,7 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
       await initCamera();
       setState(() {});
     } else {
-      // 권한이 거부당했을 때 메시지를 보여줄 수 있을지?
+      // 권한이 거부당했을 때 메시지를 보여주고, 다시 화면에 진입하면 물어봐야하나?
     }
   }
 
@@ -79,6 +79,8 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   void initState() {
     super.initState();
     initPermissions();
+    // Mixin 에 WidgetBindingObserver 추가 후 사용 가능
+    WidgetsBinding.instance.addObserver(this);
     _progressAnimationController.addListener(() {
       setState(() {});
     });
@@ -180,6 +182,20 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
     super.dispose();
   }
 
+  // 카메라 라이브러리에서 AppLifeCycle 을 관리해줄 수 없기 때문에 직접 관리해주는 메서드를 작성해야함
+  // WidgetBindingObserver 를 추가하고 난 뒤에 활용 가능
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (!_hasPermission) return;
+    if (!_cameraController.value.isInitialized) return;
+    if (state == AppLifecycleState.inactive) {
+      _cameraController.dispose();
+    } else if (state == AppLifecycleState.resumed) {
+      await initCamera();
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -249,6 +265,8 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
                         children: [
                           const Spacer(),
                           GestureDetector(
+                            onPanUpdate: (DragUpdateDetails details) =>
+                                {}, // TODO 드래그하고 위로 올리거나 내리면 Zoom-In / Zoom-out 되게끔
                             onTapDown: _startRecoding,
                             onTapUp: (details) => _stopRecoding(),
                             child: ScaleTransition(

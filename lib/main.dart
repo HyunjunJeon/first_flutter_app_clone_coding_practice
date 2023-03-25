@@ -29,7 +29,7 @@ class TikTokCloneApp extends StatelessWidget {
     return MaterialApp.router(
       // iOS Emulator 에서 debug 글자 안보이게
       debugShowCheckedModeBanner: false,
-      title: 'TikTok Clone',
+      title: 'jhj-first-flutter-app',
       themeMode: ThemeMode.system,
       // light vs dart Mode 결정하는 것을 기기의 환경에 맞춤
       theme: ThemeData(
