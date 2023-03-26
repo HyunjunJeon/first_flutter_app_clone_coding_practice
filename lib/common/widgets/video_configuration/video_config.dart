@@ -1,50 +1,62 @@
 import 'package:flutter/widgets.dart';
 
-class VideoConfigData extends InheritedWidget {
-  const VideoConfigData({
-    super.key,
-    required super.child,
-    required this.autoMute,
-    required this.toggleMuted,
-  });
+// Value 한개만 드러내는 ValueChangeNotifier 를 사용할 수도 있음(거의 없을듯^^)
+class VideoConfig extends ChangeNotifier {
+  bool autoMute = false;
 
-  final bool autoMute;
-  final void Function() toggleMuted;
-
-  static VideoConfigData of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<VideoConfigData>()!;
-  }
-
-  @override
-  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
-    return true;
+  void toggleMute() {
+    autoMute = !autoMute;
+    notifyListeners();
   }
 }
 
-class VideoConfig extends StatefulWidget {
-  final Widget child;
+final videoConfig = VideoConfig();
 
-  const VideoConfig({Key? key, required this.child}) : super(key: key);
-
-  @override
-  State<VideoConfig> createState() => _VideoConfigState();
-}
-
-class _VideoConfigState extends State<VideoConfig> {
-  bool autoMute = true;
-
-  void toggleMuted() {
-    setState(() {
-      autoMute = !autoMute;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return VideoConfigData(
-      autoMute: autoMute,
-      toggleMuted: toggleMuted,
-      child: widget.child,
-    );
-  }
-}
+// class VideoConfigData extends InheritedWidget {
+//   const VideoConfigData({
+//     super.key,
+//     required super.child,
+//     required this.autoMute,
+//     required this.toggleMuted,
+//   });
+//
+//   final bool autoMute;
+//   final void Function() toggleMuted;
+//
+//   static VideoConfigData of(BuildContext context) {
+//     return context.dependOnInheritedWidgetOfExactType<VideoConfigData>()!;
+//   }
+//
+//   @override
+//   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
+//     return true;
+//   }
+// }
+//
+// class VideoConfig extends StatefulWidget {
+//   final Widget child;
+//
+//   const VideoConfig({Key? key, required this.child}) : super(key: key);
+//
+//   @override
+//   State<VideoConfig> createState() => _VideoConfigState();
+// }
+//
+// class _VideoConfigState extends State<VideoConfig> {
+//   bool autoMute = true;
+//
+//   void toggleMuted() {
+//     setState(() {
+//       autoMute = !autoMute;
+//     });
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return VideoConfigData(
+//       autoMute: autoMute,
+//       toggleMuted: toggleMuted,
+//       child: widget.child,
+//     );
+//   }
+// }

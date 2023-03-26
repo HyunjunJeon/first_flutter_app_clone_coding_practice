@@ -36,6 +36,8 @@ class _VideoPostState extends State<VideoPost>
 
   bool _isMuted = true;
 
+  bool _autoMute = videoConfig.autoMute;
+
   void _onVideoChange() {
     if (_videoPlayerController.value.isInitialized) {
       if (_videoPlayerController.value.duration ==
@@ -69,6 +71,13 @@ class _VideoPostState extends State<VideoPost>
       value: 1.5,
       duration: _animationDuration,
     );
+
+    // AnimatedBuilder 가 아닌 Listener 를 이용해서 값의 변경을 전파받음
+    videoConfig.addListener(() {
+      setState(() {
+        _autoMute = videoConfig.autoMute;
+      });
+    });
   }
 
   void _onVisibilityChange(VisibilityInfo info) {
@@ -206,12 +215,12 @@ class _VideoPostState extends State<VideoPost>
             top: 40,
             child: IconButton(
               icon: FaIcon(
-                VideoConfigData.of(context).autoMute
+                _autoMute
                     ? FontAwesomeIcons.volumeOff
                     : FontAwesomeIcons.volumeHigh,
                 color: Colors.white,
               ),
-              onPressed: VideoConfigData.of(context).toggleMuted,
+              onPressed: videoConfig.toggleMute,
             ),
           ),
           Positioned(
