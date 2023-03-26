@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/common/widgets/video_configuration/video_config.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -28,18 +29,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: ListView(
         children: [
-          // AnimatedBuilder 를 사용하면 딱 이부분의 데이터만 변경하는게 가능해서 ChangeNotifiter 와 사용하기 좋음
-          AnimatedBuilder(
-            builder: (context, child) => SwitchListTile.adaptive(
-              value: videoConfig.autoMute,
-              onChanged: (value) {
-                videoConfig.toggleMute();
-              },
-              title: const Text("Auto Mute"),
-              subtitle: const Text("Videos will be muted by default."),
-            ),
-            animation: videoConfig,
+          SwitchListTile.adaptive(
+            value: context.watch<VideoConfig>().isMuted,
+            onChanged: (value) => context.read<VideoConfig>().toggleIsMuted(),
+            title: const Text("Auto Mute"),
+            subtitle: const Text("Videos will be muted by default."),
           ),
+          // AnimatedBuilder 를 사용하면 딱 이부분의 데이터만 변경하는게 가능해서 ChangeNotifiter 와 사용하기 좋음
+          // AnimatedBuilder(
+          //   builder: (context, child) => SwitchListTile.adaptive(
+          //     value: videoConfig.autoMute,
+          //     onChanged: (value) {
+          //       videoConfig.toggleMute();
+          //     },
+          //     title: const Text("Auto Mute"),
+          //     subtitle: const Text("Videos will be muted by default."),
+          //   ),
+          //   animation: videoConfig,
+          // ),
           CupertinoSwitch(
             value: _notification,
             onChanged: _onNotificationChange,

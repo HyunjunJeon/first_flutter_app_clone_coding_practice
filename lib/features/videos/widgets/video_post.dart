@@ -6,6 +6,7 @@ import 'package:flutter_tiktok_clone/constant/sizes.dart';
 import 'package:flutter_tiktok_clone/features/videos/widgets/video_button.dart';
 import 'package:flutter_tiktok_clone/features/videos/widgets/video_comments.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -36,7 +37,7 @@ class _VideoPostState extends State<VideoPost>
 
   bool _isMuted = true;
 
-  bool _autoMute = videoConfig.autoMute;
+  // bool _autoMute = videoConfig.autoMute;
 
   void _onVideoChange() {
     if (_videoPlayerController.value.isInitialized) {
@@ -73,11 +74,11 @@ class _VideoPostState extends State<VideoPost>
     );
 
     // AnimatedBuilder 가 아닌 Listener 를 이용해서 값의 변경을 전파받음
-    videoConfig.addListener(() {
-      setState(() {
-        _autoMute = videoConfig.autoMute;
-      });
-    });
+    // videoConfig.addListener(() {
+    //   setState(() {
+    //     _autoMute = videoConfig.autoMute;
+    //   });
+    // });
   }
 
   void _onVisibilityChange(VisibilityInfo info) {
@@ -215,12 +216,14 @@ class _VideoPostState extends State<VideoPost>
             top: 40,
             child: IconButton(
               icon: FaIcon(
-                _autoMute
+                context.watch<VideoConfig>().isMuted
                     ? FontAwesomeIcons.volumeOff
                     : FontAwesomeIcons.volumeHigh,
                 color: Colors.white,
               ),
-              onPressed: videoConfig.toggleMute,
+              onPressed: () {
+                context.read<VideoConfig>().toggleIsMuted();
+              },
             ),
           ),
           Positioned(
