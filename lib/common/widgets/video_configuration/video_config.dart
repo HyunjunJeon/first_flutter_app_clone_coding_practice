@@ -1,20 +1,18 @@
-import 'package:flutter/widgets.dart';
-
 // Provider 를 사용함
-class VideoConfig extends ChangeNotifier {
-  bool isMuted = false;
-  bool isAutoplay = false;
-
-  void toggleIsMuted() {
-    isMuted = !isMuted;
-    notifyListeners();
-  }
-
-  void toggleAutoplay() {
-    isAutoplay = !isAutoplay;
-    notifyListeners();
-  }
-}
+// class VideoConfig extends ChangeNotifier {
+//   bool isMuted = false;
+//   bool isAutoplay = false;
+//
+//   void toggleIsMuted() {
+//     isMuted = !isMuted;
+//     notifyListeners();
+//   }
+//
+//   void toggleAutoplay() {
+//     isAutoplay = !isAutoplay;
+//     notifyListeners();
+//   }
+// }
 
 // Value 한개만 드러내는 ValueChangeNotifier 를 사용할 수도 있음(거의 없을듯^^)
 // class VideoConfig extends ChangeNotifier {

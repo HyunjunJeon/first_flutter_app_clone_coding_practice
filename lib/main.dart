@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_tiktok_clone/common/widgets/video_configuration/video_config.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
+import 'package:flutter_tiktok_clone/features/videos/repositories/playback_config_repo.dart';
+import 'package:flutter_tiktok_clone/features/videos/view_models/playback_config_vm.dart';
 import 'package:flutter_tiktok_clone/router.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   // 꼭 main 의 runApp 이전에 쓰여야함
@@ -15,12 +17,22 @@ void main() async {
     ],
   );
 
+  final preferences = await SharedPreferences.getInstance();
+  final repository = PlaybackConfigRepository(preferences);
+
   // 시스템 status bar(시계, 배터리 등 나오는 최상단 부분) - 꼭 여기서 쓸 필욘 없고 모든 화면에서 컨트롤 가능
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle.dark,
   );
 
-  runApp(const TikTokCloneApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => PlaybackConfigViewModel(repository),
+      ),
+    ],
+    child: TikTokCloneApp(),
+  ));
 }
 
 class TikTokCloneApp extends StatelessWidget {
@@ -29,124 +41,116 @@ class TikTokCloneApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // https://pub.dev/packages/provider#existing-providers
-    return MultiProvider(
-      providers: [
-        // 앱 전체에 VideoConfig Notifier 를 제공하는 것
-        ChangeNotifierProvider(
-          create: (context) => VideoConfig(),
+    return MaterialApp.router(
+      // iOS Emulator 에서 debug 글자 안보이게
+      debugShowCheckedModeBanner: false,
+      title: 'jhj-first-flutter-app',
+      themeMode: ThemeMode.system,
+      // light vs dart Mode 결정하는 것을 기기의 환경에 맞춤
+      theme: ThemeData(
+        // Material3 를 사용하게끔 강제하는 것(2023.03 기준 아직도 마이그 진행중이라 임시기능 임)
+        // BottomAppBar 부분이 주로 망가지는데(M2 -> M3 로 가면서 바뀐게 많아서) 고쳐야 할 게 많음...
+        useMaterial3: false,
+        // 최대한 공통이 되는 Theme Data 는 모아두기(Material Design 에서만 사용 가능)
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: Colors.white,
+        primaryColor: const Color(0xFFE9435A),
+        textSelectionTheme: const TextSelectionThemeData(
+          // CupertinoSearchTextField 의 커서 색깔을 바꾸는 옵션이없는데, 이거는 여기서 바꿔줄 수 있음
+          cursorColor: Color(0xFFE9435A),
         ),
-      ],
-      child: MaterialApp.router(
-        // iOS Emulator 에서 debug 글자 안보이게
-        debugShowCheckedModeBanner: false,
-        title: 'jhj-first-flutter-app',
-        themeMode: ThemeMode.system,
-        // light vs dart Mode 결정하는 것을 기기의 환경에 맞춤
-        theme: ThemeData(
-          // Material3 를 사용하게끔 강제하는 것(2023.03 기준 아직도 마이그 진행중이라 임시기능 임)
-          // BottomAppBar 부분이 주로 망가지는데(M2 -> M3 로 가면서 바뀐게 많아서) 고쳐야 할 게 많음...
-          useMaterial3: false,
-          // 최대한 공통이 되는 Theme Data 는 모아두기(Material Design 에서만 사용 가능)
-          brightness: Brightness.light,
-          scaffoldBackgroundColor: Colors.white,
-          primaryColor: const Color(0xFFE9435A),
-          textSelectionTheme: const TextSelectionThemeData(
-            // CupertinoSearchTextField 의 커서 색깔을 바꾸는 옵션이없는데, 이거는 여기서 바꿔줄 수 있음
-            cursorColor: Color(0xFFE9435A),
-          ),
-          splashColor: Colors.transparent,
-          // Material Splash Color 삭제
-          highlightColor: Colors.transparent,
-          appBarTheme: const AppBarTheme(
-            // AppBar Theme Data 적용되는 부분
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.black,
-            elevation: Sizes.size0,
-            titleTextStyle: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w600,
-              fontSize: Sizes.size20,
-            ),
-          ),
-          bottomAppBarTheme: BottomAppBarTheme(
-            // 앱 전체에 적용되게끔 공통 설정을 해줄 수도 있고
-            color: Colors.grey.shade50,
-          ),
-          textTheme: Typography.blackMountainView,
-          tabBarTheme: TabBarTheme(
-            labelColor: Colors.black,
-            unselectedLabelColor: Colors.grey.shade500,
-            // Flutter 버전을 3.3.10 => 3.7.6 으로 업그레이드 했음
-            indicatorColor: Colors.black,
-          ),
-          listTileTheme: const ListTileThemeData(
-            iconColor: Colors.black,
-          ),
-          // textTheme: GoogleFonts.itimTextTheme(),
-          // https://m2.material.io/design/typography/the-type-system.html#type-scale
-          // textTheme: TextTheme(
-          //   headline1: GoogleFonts.openSans(
-          //     fontSize: 96,
-          //     fontWeight: FontWeight.w300,
-          //     letterSpacing: -1.5,
-          //   ),
-          //   headline2: GoogleFonts.openSans(
-          //       fontSize: 60, fontWeight: FontWeight.w300, letterSpacing: -0.5),
-          //   headline3:
-          //       GoogleFonts.openSans(fontSize: 48, fontWeight: FontWeight.w400),
-          //   headline4: GoogleFonts.openSans(
-          //       fontSize: 34, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-          //   headline5:
-          //       GoogleFonts.openSans(fontSize: 24, fontWeight: FontWeight.w400),
-          //   headline6: GoogleFonts.openSans(
-          //       fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.15),
-          //   subtitle1: GoogleFonts.openSans(
-          //       fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.15),
-          //   subtitle2: GoogleFonts.openSans(
-          //       fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
-          //   bodyText1: GoogleFonts.roboto(
-          //       fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
-          //   bodyText2: GoogleFonts.roboto(
-          //       fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-          //   button: GoogleFonts.roboto(
-          //       fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
-          //   caption: GoogleFonts.roboto(
-          //       fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
-          //   overline: GoogleFonts.roboto(
-          //       fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
-          // ),
-        ),
-        darkTheme: ThemeData(
-          useMaterial3: false,
-          scaffoldBackgroundColor: Colors.black,
-          primaryColor: const Color(0xFFE9435A),
-          brightness: Brightness.dark,
-          // Text Widget 의 기본 색깔이 바뀜
-          bottomAppBarTheme: BottomAppBarTheme(
-            color: Colors.grey.shade800,
-          ),
-          textSelectionTheme: const TextSelectionThemeData(
-            // CupertinoSearchTextField 의 커서 색깔을 바꾸는 옵션이없는데, 이거는 여기서 바꿔줄 수 있음
-            cursorColor: Color(0xFFE9435A),
-          ),
-          textTheme: Typography.whiteMountainView,
-          // textTheme: GoogleFonts.itimTextTheme(
-          //   ThemeData(
-          //     brightness: Brightness.dark,
-          //   ).textTheme,
-          // ),
-          appBarTheme: AppBarTheme(
-            backgroundColor: Colors.grey.shade900,
-          ),
-          tabBarTheme: const TabBarTheme(
-            indicatorColor: Colors.white,
+        splashColor: Colors.transparent,
+        // Material Splash Color 삭제
+        highlightColor: Colors.transparent,
+        appBarTheme: const AppBarTheme(
+          // AppBar Theme Data 적용되는 부분
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: Sizes.size0,
+          titleTextStyle: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w600,
+            fontSize: Sizes.size20,
           ),
         ),
-        // darkMode ThemeData 를 구성
-        // Navigator 2 를 사용하면서 이제 Home 은 필요 없어짐.
-        routerConfig: router,
-        // home: const SignUpScreen(),
+        bottomAppBarTheme: BottomAppBarTheme(
+          // 앱 전체에 적용되게끔 공통 설정을 해줄 수도 있고
+          color: Colors.grey.shade50,
+        ),
+        textTheme: Typography.blackMountainView,
+        tabBarTheme: TabBarTheme(
+          labelColor: Colors.black,
+          unselectedLabelColor: Colors.grey.shade500,
+          // Flutter 버전을 3.3.10 => 3.7.6 으로 업그레이드 했음
+          indicatorColor: Colors.black,
+        ),
+        listTileTheme: const ListTileThemeData(
+          iconColor: Colors.black,
+        ),
+        // textTheme: GoogleFonts.itimTextTheme(),
+        // https://m2.material.io/design/typography/the-type-system.html#type-scale
+        // textTheme: TextTheme(
+        //   headline1: GoogleFonts.openSans(
+        //     fontSize: 96,
+        //     fontWeight: FontWeight.w300,
+        //     letterSpacing: -1.5,
+        //   ),
+        //   headline2: GoogleFonts.openSans(
+        //       fontSize: 60, fontWeight: FontWeight.w300, letterSpacing: -0.5),
+        //   headline3:
+        //       GoogleFonts.openSans(fontSize: 48, fontWeight: FontWeight.w400),
+        //   headline4: GoogleFonts.openSans(
+        //       fontSize: 34, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+        //   headline5:
+        //       GoogleFonts.openSans(fontSize: 24, fontWeight: FontWeight.w400),
+        //   headline6: GoogleFonts.openSans(
+        //       fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.15),
+        //   subtitle1: GoogleFonts.openSans(
+        //       fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.15),
+        //   subtitle2: GoogleFonts.openSans(
+        //       fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
+        //   bodyText1: GoogleFonts.roboto(
+        //       fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
+        //   bodyText2: GoogleFonts.roboto(
+        //       fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+        //   button: GoogleFonts.roboto(
+        //       fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
+        //   caption: GoogleFonts.roboto(
+        //       fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
+        //   overline: GoogleFonts.roboto(
+        //       fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+        // ),
       ),
+      darkTheme: ThemeData(
+        useMaterial3: false,
+        scaffoldBackgroundColor: Colors.black,
+        primaryColor: const Color(0xFFE9435A),
+        brightness: Brightness.dark,
+        // Text Widget 의 기본 색깔이 바뀜
+        bottomAppBarTheme: BottomAppBarTheme(
+          color: Colors.grey.shade800,
+        ),
+        textSelectionTheme: const TextSelectionThemeData(
+          // CupertinoSearchTextField 의 커서 색깔을 바꾸는 옵션이없는데, 이거는 여기서 바꿔줄 수 있음
+          cursorColor: Color(0xFFE9435A),
+        ),
+        textTheme: Typography.whiteMountainView,
+        // textTheme: GoogleFonts.itimTextTheme(
+        //   ThemeData(
+        //     brightness: Brightness.dark,
+        //   ).textTheme,
+        // ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.grey.shade900,
+        ),
+        tabBarTheme: const TabBarTheme(
+          indicatorColor: Colors.white,
+        ),
+      ),
+      // darkMode ThemeData 를 구성
+      // Navigator 2 를 사용하면서 이제 Home 은 필요 없어짐.
+      routerConfig: router,
+      // home: const SignUpScreen(),
     );
   }
 }

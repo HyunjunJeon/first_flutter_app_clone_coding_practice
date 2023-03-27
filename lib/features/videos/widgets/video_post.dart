@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tiktok_clone/common/widgets/video_configuration/video_config.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
+import 'package:flutter_tiktok_clone/features/videos/view_models/playback_config_vm.dart';
 import 'package:flutter_tiktok_clone/features/videos/widgets/video_button.dart';
 import 'package:flutter_tiktok_clone/features/videos/widgets/video_comments.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -79,14 +79,18 @@ class _VideoPostState extends State<VideoPost>
     //     _autoMute = videoConfig.autoMute;
     //   });
     // });
+    _initMuted();
   }
 
   void _onVisibilityChange(VisibilityInfo info) {
     if (!mounted) return; // Bug Fix: 위젯이 Mounted 되지 않았다면 이후 과정이 실행되지 않도록
+    final autoplay = context.read<PlaybackConfigViewModel>().autoplay;
     if (info.visibleFraction == 1 &&
         !_isPaused &&
         !_videoPlayerController.value.isPlaying) {
-      _videoPlayerController.play();
+      if (autoplay) {
+        _videoPlayerController.play();
+      }
     }
     if (_videoPlayerController.value.isPlaying && info.visibleFraction == 0) {
       _onTogglePause();
@@ -133,6 +137,27 @@ class _VideoPostState extends State<VideoPost>
         _videoPlayerController.setVolume(0);
       });
     }
+  }
+
+  void _initMuted() {
+    // 최초 Init 때 한번만 읽어옴
+    final isAutoMuted = context.read<PlaybackConfigViewModel>().muted;
+    _setVolumeMuted(isAutoMuted); // 그거에 맞게 볼륨을 맞추고
+    setState(() {
+      // 변수 반영
+      _isMuted = isAutoMuted;
+    });
+  }
+
+  void _setVolumeMuted(bool isAutoMuted) => isAutoMuted
+      ? _videoPlayerController.setVolume(0)
+      : _videoPlayerController.setVolume(1);
+
+  void _toggleMuted() {
+    _setVolumeMuted(!_isMuted);
+    setState(() {
+      _isMuted = !_isMuted;
+    });
   }
 
   @override
@@ -216,14 +241,12 @@ class _VideoPostState extends State<VideoPost>
             top: 40,
             child: IconButton(
               icon: FaIcon(
-                context.watch<VideoConfig>().isMuted
+                _isMuted
                     ? FontAwesomeIcons.volumeOff
                     : FontAwesomeIcons.volumeHigh,
                 color: Colors.white,
               ),
-              onPressed: () {
-                context.read<VideoConfig>().toggleIsMuted();
-              },
+              onPressed: _toggleMuted,
             ),
           ),
           Positioned(
