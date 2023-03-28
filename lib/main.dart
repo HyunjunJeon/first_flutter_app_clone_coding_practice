@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
 import 'package:flutter_tiktok_clone/features/videos/repositories/playback_config_repo.dart';
 import 'package:flutter_tiktok_clone/features/videos/view_models/playback_config_vm.dart';
 import 'package:flutter_tiktok_clone/router.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -25,14 +25,15 @@ void main() async {
     SystemUiOverlayStyle.dark,
   );
 
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(
-        create: (context) => PlaybackConfigViewModel(repository),
-      ),
-    ],
-    child: TikTokCloneApp(),
-  ));
+  runApp(
+    ProviderScope(
+      overrides: [
+        playbackConfigProvider
+            .overrideWith(() => PlaybackConfigViewModel(repository)),
+      ],
+      child: const TikTokCloneApp(),
+    ),
+  );
 }
 
 class TikTokCloneApp extends StatelessWidget {

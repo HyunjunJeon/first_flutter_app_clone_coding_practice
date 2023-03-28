@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tiktok_clone/features/videos/view_models/timeline_vm.dart';
 import 'package:flutter_tiktok_clone/features/videos/widgets/video_post.dart';
 
-class VideoTimelineScreen extends StatefulWidget {
+class VideoTimelineScreen extends ConsumerStatefulWidget {
   const VideoTimelineScreen({Key? key}) : super(key: key);
 
   @override
-  State<VideoTimelineScreen> createState() => _VideoTimelineScreenState();
+  VideoTimelineScreenState createState() => VideoTimelineScreenState();
 }
 
-class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
+class VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
   final Duration _scrollDuration = const Duration(milliseconds: 250);
   final Curve _scrollCurve = Curves.linear;
 
@@ -55,22 +57,34 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
   @override
   Widget build(BuildContext context) {
     // 성능을 위해서 그냥 PageView 가 아닌 ListView.builder 처럼 PageView.builder 를 사용
-    return RefreshIndicator(
-      onRefresh: _onRefresh,
-      displacement: 40,
-      edgeOffset: 20,
-      color: Theme.of(context).primaryColor,
-      child: PageView.builder(
-        pageSnapping: true,
-        scrollDirection: Axis.vertical,
-        itemCount: _itemCount,
-        onPageChanged: _onPageChanged,
-        controller: _pageController,
-        itemBuilder: (BuildContext context, int index) => VideoPost(
-          onVideoFinished: _onVideoFinished,
-          index: index,
-        ),
-      ),
-    );
+    return ref.watch(timelineProvider).when(
+          // Async 이기 때문에 이런식으로 사용 가능
+          loading: () => const Center(
+            child: CircularProgressIndicator.adaptive(),
+          ),
+          error: (error, stackTrace) => Center(
+            child: Text(
+              "${error} & ${stackTrace}",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          data: (videos) => RefreshIndicator(
+            onRefresh: _onRefresh,
+            displacement: 40,
+            edgeOffset: 20,
+            color: Theme.of(context).primaryColor,
+            child: PageView.builder(
+              pageSnapping: true,
+              scrollDirection: Axis.vertical,
+              itemCount: videos.length,
+              onPageChanged: _onPageChanged,
+              controller: _pageController,
+              itemBuilder: (BuildContext context, int index) => VideoPost(
+                onVideoFinished: _onVideoFinished,
+                index: index,
+              ),
+            ),
+          ),
+        );
   }
 }

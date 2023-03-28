@@ -325,9 +325,9 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
                               alignment: Alignment.center,
                               child: IconButton(
                                 onPressed: _onPickVideoPressed,
-                                icon: const FaIcon(
+                                icon: FaIcon(
                                   FontAwesomeIcons.image,
-                                  color: Colors.white,
+                                  color: isDark ? Colors.white : Colors.black,
                                 ),
                               ),
                             ),

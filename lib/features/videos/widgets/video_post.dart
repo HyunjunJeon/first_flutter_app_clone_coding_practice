@@ -1,16 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
 import 'package:flutter_tiktok_clone/features/videos/view_models/playback_config_vm.dart';
 import 'package:flutter_tiktok_clone/features/videos/widgets/video_button.dart';
 import 'package:flutter_tiktok_clone/features/videos/widgets/video_comments.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class VideoPost extends StatefulWidget {
+class VideoPost extends ConsumerStatefulWidget {
   const VideoPost({
     Key? key,
     required this.onVideoFinished,
@@ -21,10 +21,10 @@ class VideoPost extends StatefulWidget {
   final int index;
 
   @override
-  State<VideoPost> createState() => _VideoPostState();
+  VideoPostState createState() => VideoPostState();
 }
 
-class _VideoPostState extends State<VideoPost>
+class VideoPostState extends ConsumerState<VideoPost>
     with SingleTickerProviderStateMixin {
   // SingleTickerProviderStateMixin: 위젯이 화면에 보일 때만(current tree) Ticker(시계)를 제공하는데, 이 시계는 매 프레임마다 Animation을 실행시키기 위함
   final VideoPlayerController _videoPlayerController =
@@ -84,7 +84,8 @@ class _VideoPostState extends State<VideoPost>
 
   void _onVisibilityChange(VisibilityInfo info) {
     if (!mounted) return; // Bug Fix: 위젯이 Mounted 되지 않았다면 이후 과정이 실행되지 않도록
-    final autoplay = context.read<PlaybackConfigViewModel>().autoplay;
+    // final autoplay = context.read<PlaybackConfigViewModel>().autoplay;
+    final autoplay = ref.read(playbackConfigProvider).autoplay;
     if (info.visibleFraction == 1 &&
         !_isPaused &&
         !_videoPlayerController.value.isPlaying) {
@@ -141,7 +142,8 @@ class _VideoPostState extends State<VideoPost>
 
   void _initMuted() {
     // 최초 Init 때 한번만 읽어옴
-    final isAutoMuted = context.read<PlaybackConfigViewModel>().muted;
+    // final isAutoMuted = context.read<PlaybackConfigViewModel>().muted;
+    final isAutoMuted = ref.read(playbackConfigProvider).muted;
     _setVolumeMuted(isAutoMuted); // 그거에 맞게 볼륨을 맞추고
     setState(() {
       // 변수 반영
