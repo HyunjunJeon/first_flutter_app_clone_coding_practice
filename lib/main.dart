@@ -1,15 +1,21 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
 import 'package:flutter_tiktok_clone/features/videos/repositories/playback_config_repo.dart';
 import 'package:flutter_tiktok_clone/features/videos/view_models/playback_config_vm.dart';
+import 'package:flutter_tiktok_clone/firebase_options.dart';
 import 'package:flutter_tiktok_clone/router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   // 꼭 main 의 runApp 이전에 쓰여야함
   WidgetsFlutterBinding.ensureInitialized(); // Flutter Engine 과 Widget 들을 결합시켜줌
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   await SystemChrome.setPreferredOrientations(
     [
@@ -36,11 +42,11 @@ void main() async {
   );
 }
 
-class TikTokCloneApp extends StatelessWidget {
+class TikTokCloneApp extends ConsumerWidget {
   const TikTokCloneApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // https://pub.dev/packages/provider#existing-providers
     return MaterialApp.router(
       // iOS Emulator 에서 debug 글자 안보이게
@@ -150,7 +156,7 @@ class TikTokCloneApp extends StatelessWidget {
       ),
       // darkMode ThemeData 를 구성
       // Navigator 2 를 사용하면서 이제 Home 은 필요 없어짐.
-      routerConfig: router,
+      routerConfig: ref.watch(routerProvider),
       // home: const SignUpScreen(),
     );
   }

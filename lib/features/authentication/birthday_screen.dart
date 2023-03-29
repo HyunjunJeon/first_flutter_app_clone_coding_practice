@@ -1,19 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
+import 'package:flutter_tiktok_clone/features/authentication/view_models/signup_vm.dart';
 import 'package:flutter_tiktok_clone/features/authentication/widgets/form_button.dart';
-import 'package:flutter_tiktok_clone/features/onboarding/interests_screen.dart';
-import 'package:go_router/go_router.dart';
 
-class BirthdayScreen extends StatefulWidget {
+class BirthdayScreen extends ConsumerStatefulWidget {
   const BirthdayScreen({Key? key}) : super(key: key);
 
   @override
-  State<BirthdayScreen> createState() => _BirthdayScreenState();
+  BirthdayScreenState createState() => BirthdayScreenState();
 }
 
-class _BirthdayScreenState extends State<BirthdayScreen> {
+class BirthdayScreenState extends ConsumerState<BirthdayScreen> {
   final TextEditingController _birthdayController = TextEditingController();
 
   DateTime initDate = DateTime.now();
@@ -37,8 +37,10 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     //   ),
     //   (route) => false,
     // );
-    context.pushReplacementNamed(InterestsScreen
-        .routeName); // Push 는 되지만 뒤로 갈 수 없도록 - pushReplacementNamed 를 사용함
+    // context.pushReplacementNamed(InterestsScreen.routeName); // Push 는 되지만 뒤로 갈 수 없도록 - pushReplacementNamed 를 사용함
+
+    // print(ref.read(signUpForm));
+    ref.read(signUpProvider.notifier).signUp();
   }
 
   void _setTextFieldDate(DateTime date) {
@@ -99,8 +101,8 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
             Gaps.v32,
             GestureDetector(
               onTap: _onNextTap,
-              child: const FormButton(
-                disabled: false,
+              child: FormButton(
+                disabled: ref.watch(signUpProvider).isLoading,
                 buttonText: "Next",
               ),
             ),

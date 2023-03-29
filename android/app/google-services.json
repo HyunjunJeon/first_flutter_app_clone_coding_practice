@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "330331130378",
+    "project_id": "jhj-flutter-first",
+    "storage_bucket": "jhj-flutter-first.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330331130378:android:763030d4f59e33810fedf3",
+        "android_client_info": {
+          "package_name": "org.jhj.clone.flutter_tiktok_clone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "330331130378-oe2j983nuttg9qhu10lr3pllgfhe00ha.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1fmUg5dJhmjwCyuPxMHr85dTmWgB8loQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "330331130378-oe2j983nuttg9qhu10lr3pllgfhe00ha.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "330331130378-jvkei5l84qqrod9sqo1glenfglmptjfq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.study.jhj"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
