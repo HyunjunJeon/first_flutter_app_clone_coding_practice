@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
 import 'package:flutter_tiktok_clone/features/authentication/login_form_screen.dart';
+import 'package:flutter_tiktok_clone/features/authentication/view_models/social_auth_view_model.dart';
 import 'package:flutter_tiktok_clone/features/authentication/widgets/auth_button.dart';
 import 'package:flutter_tiktok_clone/utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends ConsumerWidget {
   static String routeName = "login";
   static String routeURL = "/login";
 
@@ -29,7 +31,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: SafeArea(
         // Status Bar, 하단 부분까지를 피해서 만들 수 있음
@@ -67,15 +69,20 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               Gaps.v16,
-              const AuthButton(
-                text: "Continue with Apple",
-                icon: FaIcon(FontAwesomeIcons.apple),
+              GestureDetector(
+                onTap: () => ref
+                    .read(SocialAuthProvider.notifier)
+                    .signInWithGitHub(context),
+                child: const AuthButton(
+                  text: "Continue with Github",
+                  icon: FaIcon(FontAwesomeIcons.github),
+                ),
               ),
-              Gaps.v16,
-              const AuthButton(
-                text: "Continue with Google",
-                icon: FaIcon(FontAwesomeIcons.google),
-              ),
+              // Gaps.v16,
+              // const AuthButton(
+              //   text: "Continue with Google",
+              //   icon: FaIcon(FontAwesomeIcons.google),
+              // ),
             ],
           ),
         ),

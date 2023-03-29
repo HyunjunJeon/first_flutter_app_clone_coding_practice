@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
+import 'package:flutter_tiktok_clone/features/authentication/view_models/login_view_model.dart';
 import 'package:flutter_tiktok_clone/features/authentication/widgets/form_button.dart';
-import 'package:flutter_tiktok_clone/features/onboarding/interests_screen.dart';
-import 'package:go_router/go_router.dart';
 
-class LoginFormScreen extends StatefulWidget {
+class LoginFormScreen extends ConsumerStatefulWidget {
   const LoginFormScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginFormScreen> createState() => _LoginFormScreenState();
+  LoginFormScreenState createState() => LoginFormScreenState();
 }
 
-class _LoginFormScreenState extends State<LoginFormScreen> {
+class LoginFormScreenState extends ConsumerState<LoginFormScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Map<String, String> formData = {};
@@ -29,7 +29,11 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
         // ),
         // (route) => false, // 이전의 route 정보를 유지할 것인가 말것인가를 bool 로 전달
         // );
-        context.goNamed(InterestsScreen.routeName);
+        ref.read(loginProvider.notifier).login(
+              formData["email"]!,
+              formData["password"]!,
+              context,
+            );
       }
     }
   }
@@ -107,7 +111,10 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
               Gaps.v28,
               GestureDetector(
                 onTap: _onSubmitTap,
-                child: const FormButton(disabled: false, buttonText: "Next"),
+                child: FormButton(
+                  disabled: ref.watch(loginProvider).isLoading,
+                  buttonText: "Next",
+                ),
               ),
             ],
           ),

@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tiktok_clone/features/authentication/repos/authentication_repo.dart';
 import 'package:flutter_tiktok_clone/features/videos/view_models/playback_config_vm.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -111,13 +113,13 @@ class SettingsScreen extends ConsumerWidget {
                 lastDate: DateTime.now(),
                 builder: (context, child) {
                   return Theme(
-                    child: child!,
                     data: ThemeData(
                       appBarTheme: const AppBarTheme(
                         foregroundColor: Colors.white,
                         backgroundColor: Colors.black,
                       ),
                     ),
+                    child: child!,
                   );
                 },
               );
@@ -142,9 +144,12 @@ class SettingsScreen extends ConsumerWidget {
                         onPressed: () => Navigator.of(context).pop(),
                       ),
                       CupertinoDialogAction(
-                        child: const Text("Yes"),
                         isDestructiveAction: true,
-                        onPressed: () => Navigator.of(context).pop(),
+                        onPressed: () {
+                          ref.read(autoRepo).signOut();
+                          context.go("/");
+                        },
+                        child: const Text("Yes"),
                       ),
                     ],
                   ),

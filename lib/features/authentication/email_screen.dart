@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
 import 'package:flutter_tiktok_clone/features/authentication/password_screen.dart';
-import 'package:flutter_tiktok_clone/features/authentication/view_models/signup_vm.dart';
+import 'package:flutter_tiktok_clone/features/authentication/view_models/signup_view_model.dart';
 import 'package:flutter_tiktok_clone/features/authentication/widgets/form_button.dart';
 
 class EmailScreenArgs {

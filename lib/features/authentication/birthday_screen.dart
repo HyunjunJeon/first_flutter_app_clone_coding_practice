@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
-import 'package:flutter_tiktok_clone/features/authentication/view_models/signup_vm.dart';
+import 'package:flutter_tiktok_clone/features/authentication/view_models/signup_view_model.dart';
 import 'package:flutter_tiktok_clone/features/authentication/widgets/form_button.dart';
 
 class BirthdayScreen extends ConsumerStatefulWidget {
@@ -40,7 +40,7 @@ class BirthdayScreenState extends ConsumerState<BirthdayScreen> {
     // context.pushReplacementNamed(InterestsScreen.routeName); // Push 는 되지만 뒤로 갈 수 없도록 - pushReplacementNamed 를 사용함
 
     // print(ref.read(signUpForm));
-    ref.read(signUpProvider.notifier).signUp();
+    ref.read(signUpProvider.notifier).signUp(context);
   }
 
   void _setTextFieldDate(DateTime date) {

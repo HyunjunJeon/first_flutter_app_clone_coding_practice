@@ -22,6 +22,19 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>REVERSED_CLIENT_ID</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.330331130378-jvkei5l84qqrod9sqo1glenfglmptjfq</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -30,6 +43,8 @@
 	<string>Camera Usage OK?</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Microphone Usage OK?</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photo Library Use OK?</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -51,7 +66,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSPhotoLibraryUsageDescription</key>
-    <string>Photo Library Use OK?</string>
 </dict>
 </plist>
