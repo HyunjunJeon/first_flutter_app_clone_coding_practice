@@ -40,6 +40,11 @@ class BirthdayScreenState extends ConsumerState<BirthdayScreen> {
     // context.pushReplacementNamed(InterestsScreen.routeName); // Push 는 되지만 뒤로 갈 수 없도록 - pushReplacementNamed 를 사용함
 
     // print(ref.read(signUpForm));
+    final state = ref.read(signUpForm.notifier).state;
+    ref.read(signUpForm.notifier).state = {
+      ...state,
+      "bio": _birthdayController.text,
+    };
     ref.read(signUpProvider.notifier).signUp(context);
   }
 

@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
 import 'package:flutter_tiktok_clone/features/authentication/email_screen.dart';
 import 'package:flutter_tiktok_clone/features/authentication/widgets/form_button.dart';
 
-class UsernameScreen extends StatefulWidget {
+class UsernameScreen extends ConsumerStatefulWidget {
   static const String routeURL = "username";
   static const String routeName = "username_screen";
 
   const UsernameScreen({Key? key}) : super(key: key);
 
   @override
-  State<UsernameScreen> createState() => _UsernameScreenState();
+  UsernameScreenState createState() => UsernameScreenState();
 }
 
-class _UsernameScreenState extends State<UsernameScreen> {
+class UsernameScreenState extends ConsumerState<UsernameScreen> {
   final TextEditingController _usernameController = TextEditingController();
 
   String _username = "";
@@ -46,7 +47,6 @@ class _UsernameScreenState extends State<UsernameScreen> {
     //   EmailScreen.routeName,
     //   extra: EmailScreenArgs(username: _username),
     // );
-
     Navigator.push(
       context,
       MaterialPageRoute(
