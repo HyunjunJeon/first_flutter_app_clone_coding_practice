@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
-import 'package:flutter_tiktok_clone/features/videos/repositories/playback_config_repo.dart';
+import 'package:flutter_tiktok_clone/features/videos/repos/playback_config_repo.dart';
 import 'package:flutter_tiktok_clone/features/videos/view_models/playback_config_vm.dart';
 import 'package:flutter_tiktok_clone/firebase_options.dart';
 import 'package:flutter_tiktok_clone/router.dart';
