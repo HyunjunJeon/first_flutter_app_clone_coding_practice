@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
-import 'package:flutter_tiktok_clone/features/inbox/activity_screen.dart';
-import 'package:flutter_tiktok_clone/features/inbox/chats_screen.dart';
+import 'package:flutter_tiktok_clone/features/inbox/views/activity_screen.dart';
+import 'package:flutter_tiktok_clone/features/inbox/views/chats_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 

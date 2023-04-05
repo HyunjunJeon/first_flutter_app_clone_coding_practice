@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
 import 'package:flutter_tiktok_clone/features/discover/discover_screen.dart';
-import 'package:flutter_tiktok_clone/features/inbox/inbox_screen.dart';
+import 'package:flutter_tiktok_clone/features/inbox/views/inbox_screen.dart';
 import 'package:flutter_tiktok_clone/features/onboarding/widgets/post_video_button.dart';
 import 'package:flutter_tiktok_clone/features/users/user_profile_screen.dart';
 import 'package:flutter_tiktok_clone/features/videos/views/video_recording_screen.dart';
@@ -83,7 +83,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       bottomNavigationBar: BottomAppBar(
         color: _selectedTab.index == 0 || isDark ? Colors.black : Colors.white,
         child: Padding(
-          padding: const EdgeInsets.all(Sizes.size12),
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).padding.bottom + Sizes.size16,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

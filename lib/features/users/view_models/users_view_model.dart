@@ -15,7 +15,7 @@ class UsersViewModel extends AsyncNotifier<UserProfileModel> {
     // await Future.delayed(const Duration(seconds: 5)); // 실제로 동작하는지 테스트용도
 
     _userRepository = ref.read(userRepo);
-    _authRepository = ref.read(autoRepo);
+    _authRepository = ref.read(authRepo);
 
     if (_authRepository.isLoggedIn) {
       final profile =

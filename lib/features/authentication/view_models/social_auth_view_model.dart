@@ -11,7 +11,7 @@ class SocialAuthViewModel extends AsyncNotifier<void> {
 
   @override
   FutureOr<void> build() {
-    _repository = ref.read(autoRepo);
+    _repository = ref.read(authRepo);
   }
 
   Future<void> signInWithGitHub(BuildContext context) async {

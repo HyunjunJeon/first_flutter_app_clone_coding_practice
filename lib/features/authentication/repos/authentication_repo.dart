@@ -32,9 +32,9 @@ class AuthenticationRepository {
   }
 }
 
-final autoRepo = Provider((ref) => AuthenticationRepository());
+final authRepo = Provider((ref) => AuthenticationRepository());
 
 final authState = StreamProvider((ref) {
-  final repo = ref.read(autoRepo);
+  final repo = ref.read(authRepo);
   return repo.authStateChanges();
 });

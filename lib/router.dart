@@ -4,9 +4,9 @@ import 'package:flutter_tiktok_clone/common/widgets/main_navigation/main_navigat
 import 'package:flutter_tiktok_clone/features/authentication/login_screen.dart';
 import 'package:flutter_tiktok_clone/features/authentication/repos/authentication_repo.dart';
 import 'package:flutter_tiktok_clone/features/authentication/sign_up_screen.dart';
-import 'package:flutter_tiktok_clone/features/inbox/activity_screen.dart';
-import 'package:flutter_tiktok_clone/features/inbox/chat_detail_screen.dart';
-import 'package:flutter_tiktok_clone/features/inbox/chats_screen.dart';
+import 'package:flutter_tiktok_clone/features/inbox/views/activity_screen.dart';
+import 'package:flutter_tiktok_clone/features/inbox/views/chat_detail_screen.dart';
+import 'package:flutter_tiktok_clone/features/inbox/views/chats_screen.dart';
 import 'package:flutter_tiktok_clone/features/onboarding/interests_screen.dart';
 import 'package:flutter_tiktok_clone/features/videos/views/video_recording_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -17,7 +17,7 @@ final routerProvider = Provider(
     return GoRouter(
       initialLocation: "/home",
       redirect: (context, state) {
-        final bool isLoggedIn = ref.read(autoRepo).isLoggedIn;
+        final bool isLoggedIn = ref.read(authRepo).isLoggedIn;
         if (!isLoggedIn) {
           if (state.subloc != SignUpScreen.routeURL &&
               state.subloc != LoginScreen.routeURL) {

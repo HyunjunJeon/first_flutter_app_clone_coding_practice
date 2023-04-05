@@ -11,7 +11,7 @@ class LoginViewModel extends AsyncNotifier<void> {
 
   @override
   FutureOr<void> build() {
-    _repository = ref.read(autoRepo);
+    _repository = ref.read(authRepo);
   }
 
   Future<void> login(

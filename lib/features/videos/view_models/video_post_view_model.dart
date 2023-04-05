@@ -13,7 +13,7 @@ class VideoPostViewModel extends FamilyAsyncNotifier<bool, String> {
   @override
   FutureOr<bool> build(String arg) async {
     _videoId = arg;
-    _userId = ref.read(autoRepo).user!.uid;
+    _userId = ref.read(authRepo).user!.uid;
     _repository = ref.refresh(videosRepo);
     _isLiked =
         await _repository.isLikedVideo(videoId: _videoId, userId: _userId);

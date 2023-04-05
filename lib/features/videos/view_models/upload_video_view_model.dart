@@ -14,7 +14,7 @@ class UploadVideoViewModel extends AsyncNotifier<void> {
   @override
   FutureOr<void> build() {
     _videosRepository = ref.read(videosRepo);
-    _authRepository = ref.read(autoRepo);
+    _authRepository = ref.read(authRepo);
   }
 
   Future<void> uploadVideo(File video) async {

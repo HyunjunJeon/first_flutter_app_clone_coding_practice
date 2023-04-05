@@ -146,7 +146,7 @@ class SettingsScreen extends ConsumerWidget {
                       CupertinoDialogAction(
                         isDestructiveAction: true,
                         onPressed: () {
-                          ref.read(autoRepo).signOut();
+                          ref.read(authRepo).signOut();
                           context.go("/");
                         },
                         child: const Text("Yes"),
@@ -175,7 +175,7 @@ class SettingsScreen extends ConsumerWidget {
                       TextButton(
                         child: const Text("Yes"),
                         onPressed: () {
-                          ref.read(autoRepo).signOut();
+                          ref.read(authRepo).signOut();
                           context.go("/");
                         },
                       ),
@@ -202,7 +202,7 @@ class SettingsScreen extends ConsumerWidget {
                       CupertinoActionSheetAction(
                         isDestructiveAction: true,
                         onPressed: () {
-                          ref.read(autoRepo).signOut();
+                          ref.read(authRepo).signOut();
                           context.go("/");
                         },
                         child: const Text("Yes Plz"),

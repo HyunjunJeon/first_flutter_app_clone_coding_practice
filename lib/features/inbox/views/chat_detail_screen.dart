@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
+import 'package:flutter_tiktok_clone/features/authentication/repos/authentication_repo.dart';
+import 'package:flutter_tiktok_clone/features/inbox/view_models/messages_view_model.dart';
+import 'package:flutter_tiktok_clone/utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class ChatDetailScreen extends StatefulWidget {
+class ChatDetailScreen extends ConsumerStatefulWidget {
   static const String routeName = "chatDetail";
   static const String routeURL = ":chatId";
 
@@ -12,10 +16,10 @@ class ChatDetailScreen extends StatefulWidget {
   const ChatDetailScreen({Key? key, required this.chatId}) : super(key: key);
 
   @override
-  State<ChatDetailScreen> createState() => _ChatDetailScreenState();
+  ChatDetailScreenState createState() => ChatDetailScreenState();
 }
 
-class _ChatDetailScreenState extends State<ChatDetailScreen> {
+class ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   final TextEditingController _textEditingController = TextEditingController();
 
   bool _isWriting = false;
@@ -30,18 +34,19 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     });
   }
 
-  Future<bool> _sampleApiCall(String value) {
-    print("server gone: $value");
-    return Future(() => true);
-  }
-
   void _onSubmittedWriting(String value) async {
-    await _sampleApiCall(value); // 가상의 API 콜을 통해 서버에 텍스트 데이터를 전달하고..
+    await ref.read(messagesProvider.notifier).sendMessage(value);
     FocusScope.of(context).unfocus();
     setState(() {
       _textEditingController.clear();
       _isWriting = false;
     });
+  }
+
+  _onSendPress() {
+    final text = _textEditingController.text;
+    if (text == "") return;
+    _onSubmittedWriting(text);
   }
 
   @override
@@ -52,6 +57,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = isDarkMode(context);
+    final isLoading = ref.watch(messagesProvider).isLoading;
     return Scaffold(
       appBar: AppBar(
         title: ListTile(
@@ -116,55 +123,81 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         children: [
           GestureDetector(
             onTap: _onTapUnFocus,
-            child: ListView.separated(
-                padding: const EdgeInsets.symmetric(
-                  vertical: Sizes.size20,
-                  horizontal: Sizes.size14,
-                ),
-                itemBuilder: (context, index) {
-                  final bool isMine = index % 2 == 0;
-                  return Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: isMine
-                        ? MainAxisAlignment.end
-                        : MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(
-                          Sizes.size14,
-                        ),
-                        decoration: BoxDecoration(
-                          color: isMine
-                              ? Colors.blue
-                              : Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.only(
-                            topLeft: const Radius.circular(
-                              Sizes.size20,
-                            ),
-                            topRight: const Radius.circular(
-                              Sizes.size20,
-                            ),
-                            bottomLeft: Radius.circular(
-                              isMine ? Sizes.size20 : 0,
-                            ),
-                            bottomRight: Radius.circular(
-                              isMine ? 0 : Sizes.size20,
-                            ),
-                          ),
-                        ),
-                        child: const Text(
-                          "this is a message",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: Sizes.size16,
-                          ),
-                        ),
+            /*
+            family 생성자를 사용하여 chatRoomId에 따라 다른 Stream을 반환합니다.
+            이 Provider를 사용하려면, 해당 Provider를 사용하는 Widget에서 아래와 같이 사용하시면 됩니다.
+            final chatProvider = context.read(chatProvider("chatRoomId"));
+            위 코드에서 "chatRoomId"는 실제로 사용하는 채팅방의 ID로 대체되어야 합니다.
+            * */
+            child: ref.watch(chatProvider("chatRoomId")).when(
+                  data: (data) {
+                    return ListView.separated(
+                      reverse: true,
+                      padding: EdgeInsets.only(
+                        left: Sizes.size20,
+                        right: Sizes.size14,
+                        bottom: MediaQuery.of(context).padding.bottom +
+                            Sizes.size96,
                       ),
-                    ],
-                  );
-                },
-                separatorBuilder: (context, index) => Gaps.v10,
-                itemCount: 12),
+                      itemBuilder: (context, index) {
+                        final message = data[index];
+                        final isMine =
+                            message.userId == ref.watch(authRepo).user!.uid;
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: isMine
+                              ? MainAxisAlignment.end
+                              : MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(
+                                Sizes.size14,
+                              ),
+                              decoration: BoxDecoration(
+                                color: isMine
+                                    ? Colors.blue
+                                    : Theme.of(context).primaryColor,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: const Radius.circular(
+                                    Sizes.size20,
+                                  ),
+                                  topRight: const Radius.circular(
+                                    Sizes.size20,
+                                  ),
+                                  bottomLeft: Radius.circular(
+                                    isMine ? Sizes.size20 : 0,
+                                  ),
+                                  bottomRight: Radius.circular(
+                                    isMine ? 0 : Sizes.size20,
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                message.text,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: Sizes.size16,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                      separatorBuilder: (context, index) => Gaps.v10,
+                      itemCount: data.length,
+                    );
+                  },
+                  error: (error, stackTrace) {
+                    return Center(
+                      child: Text(
+                        error.toString(),
+                      ),
+                    );
+                  },
+                  loading: () => const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  ),
+                ),
           ),
           Positioned(
             bottom: 0,
@@ -180,6 +213,10 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                     Gaps.h16,
                     Expanded(
                       child: TextField(
+                        style: TextStyle(
+                          color: isDark ? Colors.white : Colors.black,
+                          fontSize: Sizes.size16,
+                        ),
                         controller: _textEditingController,
                         onTap: _onStartWriting,
                         onSubmitted: _onSubmittedWriting,
@@ -223,15 +260,20 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                           color: Colors.grey.shade400,
                           shape: BoxShape.circle,
                         ),
-                        child: const Padding(
-                          padding: EdgeInsets.all(
+                        child: Padding(
+                          padding: const EdgeInsets.all(
                             Sizes.size10,
                           ),
                           child: Center(
-                            child: FaIcon(
-                              FontAwesomeIcons.solidPaperPlane,
-                              color: Colors.white,
-                              size: Sizes.size20,
+                            child: IconButton(
+                              onPressed: isLoading ? null : _onSendPress,
+                              icon: FaIcon(
+                                isLoading
+                                    ? FontAwesomeIcons.hourglass
+                                    : FontAwesomeIcons.solidPaperPlane,
+                                color: Colors.white,
+                                size: Sizes.size20,
+                              ),
                             ),
                           ),
                         ),
