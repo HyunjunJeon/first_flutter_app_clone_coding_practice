@@ -174,7 +174,10 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                       TextButton(
                         child: const Text("Yes"),
-                        onPressed: () => Navigator.of(context).pop(),
+                        onPressed: () {
+                          ref.read(autoRepo).signOut();
+                          context.go("/");
+                        },
                       ),
                     ],
                   ),
@@ -198,7 +201,10 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                       CupertinoActionSheetAction(
                         isDestructiveAction: true,
-                        onPressed: () => Navigator.of(context).pop(),
+                        onPressed: () {
+                          ref.read(autoRepo).signOut();
+                          context.go("/");
+                        },
                         child: const Text("Yes Plz"),
                       ),
                     ],

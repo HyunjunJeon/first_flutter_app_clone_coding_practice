@@ -883,6 +883,6 @@ SPEC CHECKSUMS:
   shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
   video_player_avfoundation: 81e49bb3d9fb63dccf9fa0f6d877dc3ddbeac126
 
-PODFILE CHECKSUM: 81da7a11657df2e61f596f111eb8b3dde597c4d3
+PODFILE CHECKSUM: ed0e1e8ce935ff4b28f3945e0e056a38d865b107
 
 COCOAPODS: 1.12.0

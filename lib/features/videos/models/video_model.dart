@@ -1,4 +1,5 @@
 class VideoModel {
+  final String id;
   final String title;
   final String description;
   final String fileUrl;
@@ -10,6 +11,7 @@ class VideoModel {
   final int createdAt;
 
   VideoModel({
+    required this.id,
     required this.title,
     required this.description,
     required this.fileUrl,
@@ -23,19 +25,21 @@ class VideoModel {
 
   Map<String, dynamic> toJson() {
     return {
-      "title" : title,
-      "description" : description,
-      "fileUrl" : fileUrl,
-      "thumbnailUrl" : thumbnailUrl,
-      "creatorUid" : creatorUid,
-      "creator" : creator,
-      "likes" : likes,
-      "comments" : comments,
-      "createdAt" : createdAt
+      "id": id,
+      "title": title,
+      "description": description,
+      "fileUrl": fileUrl,
+      "thumbnailUrl": thumbnailUrl,
+      "creatorUid": creatorUid,
+      "creator": creator,
+      "likes": likes,
+      "comments": comments,
+      "createdAt": createdAt
     };
   }
 
   VideoModel copyWith({
+    String? id,
     String? title,
     String? description,
     String? fileUrl,
@@ -47,6 +51,7 @@ class VideoModel {
     int? createdAt,
   }) {
     return VideoModel(
+      id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
       fileUrl: fileUrl ?? this.fileUrl,
@@ -58,4 +63,18 @@ class VideoModel {
       createdAt: createdAt ?? this.createdAt,
     );
   }
+
+  VideoModel.fromJson({
+    required Map<String, dynamic> json,
+    required String videoId,
+  })  : id = videoId,
+        title = json['title'],
+        description = json['description'],
+        fileUrl = json['fileUrl'],
+        thumbnailUrl = json['thumbnailUrl'],
+        creatorUid = json['creatorUid'],
+        creator = json['creator'],
+        likes = json['likes'],
+        comments = json['comments'],
+        createdAt = json['createdAt'];
 }

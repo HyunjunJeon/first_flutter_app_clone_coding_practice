@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
@@ -29,7 +28,8 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   bool _isFlashMode = false;
   bool _isFlashLightMode = false;
 
-  late final bool _noCamera = kDebugMode && Platform.isIOS;
+  // iOS 시뮬레이터에서 실행 중이라면 true 를 반환함
+  late final bool _noCamera = Platform.isMacOS && Platform.isIOS;
 
   late CameraController _cameraController;
 
@@ -78,6 +78,8 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
     _cameraController = CameraController(
       cameras[_isSelfieMode ? 1 : 0],
       ResolutionPreset.ultraHigh,
+      imageFormatGroup:
+          Platform.isIOS ? ImageFormatGroup.yuv420 : ImageFormatGroup.bgra8888,
     ); // 0: 후면 카메라, 1: 전면 카메라
 
     await _cameraController.initialize();
@@ -108,8 +110,10 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   }
 
   Future<void> toggleSelfieMode() async {
-    _isSelfieMode = !_isSelfieMode;
     await initCamera();
+    setState(() {
+      _isSelfieMode = !_isSelfieMode;
+    });
   }
 
   Future<void> toggleFlashMode() async {

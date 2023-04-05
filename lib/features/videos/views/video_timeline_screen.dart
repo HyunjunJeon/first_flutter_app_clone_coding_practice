@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tiktok_clone/features/videos/view_models/timeline_vm.dart';
+import 'package:flutter_tiktok_clone/features/videos/view_models/timeline_view_model.dart';
 import 'package:flutter_tiktok_clone/features/videos/widgets/video_post.dart';
 
 class VideoTimelineScreen extends ConsumerStatefulWidget {
@@ -14,7 +14,7 @@ class VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
   final Duration _scrollDuration = const Duration(milliseconds: 250);
   final Curve _scrollCurve = Curves.linear;
 
-  int _itemCount = 4;
+  int _itemCount = 0;
 
   void _onPageChanged(int page) {
     // infinite scroll
@@ -24,8 +24,7 @@ class VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
       curve: _scrollCurve,
     );
     if (page == _itemCount - 1) {
-      _itemCount = _itemCount + 4;
-      setState(() {});
+      ref.watch(timelineProvider.notifier).fetchNextPage();
     }
   }
 
@@ -47,11 +46,12 @@ class VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
 
   Future<void> _onRefresh() {
     // onRefresh 는 항상 Future 를 반환해야함
-    return Future.delayed(
-      const Duration(
-        seconds: 5, // 일부러 5초정도 리프레쉬 하는게 있는 것처럼 보여줌
-      ),
-    );
+    // return Future.delayed(
+    //   const Duration(
+    //     seconds: 5, // 일부러 5초정도 리프레쉬 하는게 있는 것처럼 보여줌
+    //   ),
+    // );
+    return ref.watch(timelineProvider.notifier).refresh();
   }
 
   @override
@@ -64,27 +64,34 @@ class VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
           ),
           error: (error, stackTrace) => Center(
             child: Text(
-              "${error} & ${stackTrace}",
-              style: TextStyle(color: Colors.white),
+              "$error & $stackTrace",
+              style: const TextStyle(color: Colors.white),
             ),
           ),
-          data: (videos) => RefreshIndicator(
-            onRefresh: _onRefresh,
-            displacement: 40,
-            edgeOffset: 20,
-            color: Theme.of(context).primaryColor,
-            child: PageView.builder(
-              pageSnapping: true,
-              scrollDirection: Axis.vertical,
-              itemCount: videos.length,
-              onPageChanged: _onPageChanged,
-              controller: _pageController,
-              itemBuilder: (BuildContext context, int index) => VideoPost(
-                onVideoFinished: _onVideoFinished,
-                index: index,
+          data: (videos) {
+            _itemCount = videos.length;
+            return RefreshIndicator(
+              onRefresh: _onRefresh,
+              displacement: 40,
+              edgeOffset: 20,
+              color: Theme.of(context).primaryColor,
+              child: PageView.builder(
+                pageSnapping: true,
+                scrollDirection: Axis.vertical,
+                itemCount: videos.length,
+                onPageChanged: _onPageChanged,
+                controller: _pageController,
+                itemBuilder: (context, index) {
+                  final videoData = videos[index];
+                  return VideoPost(
+                    onVideoFinished: _onVideoFinished,
+                    index: index,
+                    videoData: videoData,
+                  );
+                },
               ),
-            ),
-          ),
+            );
+          },
         );
   }
 }

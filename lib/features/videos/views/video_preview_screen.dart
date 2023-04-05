@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tiktok_clone/features/videos/view_models/upload_video_view_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:video_player/video_player.dart';
 
@@ -65,7 +66,9 @@ class VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
 
   void _onUploadPressed() {
     File videoFile = File(widget.video.path);
-    ref.read(uploadVideoProvider.notifier).uploadVideo(videoFile, context);
+    ref.read(uploadVideoProvider.notifier).uploadVideo(videoFile);
+    context.pop();
+    context.pop();
   }
 
   @override

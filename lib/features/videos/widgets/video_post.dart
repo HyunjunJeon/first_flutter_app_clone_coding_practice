@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tiktok_clone/constant/gaps.dart';
 import 'package:flutter_tiktok_clone/constant/sizes.dart';
+import 'package:flutter_tiktok_clone/features/videos/models/video_model.dart';
 import 'package:flutter_tiktok_clone/features/videos/view_models/playback_config_vm.dart';
 import 'package:flutter_tiktok_clone/features/videos/widgets/video_button.dart';
 import 'package:flutter_tiktok_clone/features/videos/widgets/video_comments.dart';
+import 'package:flutter_tiktok_clone/features/videos/widgets/video_likes.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -15,10 +17,12 @@ class VideoPost extends ConsumerStatefulWidget {
     Key? key,
     required this.onVideoFinished,
     required this.index,
+    required this.videoData,
   }) : super(key: key);
 
   final Function onVideoFinished;
   final int index;
+  final VideoModel videoData;
 
   @override
   VideoPostState createState() => VideoPostState();
@@ -177,9 +181,18 @@ class VideoPostState extends ConsumerState<VideoPost>
         children: [
           Positioned.fill(
             child: _videoPlayerController.value.isInitialized
-                ? VideoPlayer(_videoPlayerController)
-                : Container(
-                    color: Colors.teal,
+                // https://stackoverflow.com/questions/57077639/how-to-boxfit-cover-a-fullscreen-videoplayer-widget-with-specific-aspect-ratio
+                ? FittedBox(
+                    fit: BoxFit.cover,
+                    child: SizedBox(
+                      width: _videoPlayerController.value.aspectRatio,
+                      height: 1,
+                      child: VideoPlayer(_videoPlayerController),
+                    ),
+                  )
+                : Image.network(
+                    widget.videoData.thumbnailUrl,
+                    fit: BoxFit.cover,
                   ),
           ),
           Positioned.fill(
@@ -217,10 +230,10 @@ class VideoPostState extends ConsumerState<VideoPost>
             left: 15,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
-                  "@아이디",
-                  style: TextStyle(
+                  "@${widget.videoData.creator}",
+                  style: const TextStyle(
                     fontSize: Sizes.size20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -228,8 +241,8 @@ class VideoPostState extends ConsumerState<VideoPost>
                 ),
                 Gaps.v10,
                 Text(
-                  "This is my dogs mozzi & moca",
-                  style: TextStyle(
+                  widget.videoData.description,
+                  style: const TextStyle(
                     fontSize: Sizes.size16,
                     color: Colors.white,
                   ),
@@ -266,33 +279,35 @@ class VideoPostState extends ConsumerState<VideoPost>
                   ),
                 ),
                 Gaps.v24,
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 25,
                   backgroundColor: Colors.black,
                   foregroundImage: NetworkImage(
-                      "https://avatars.githubusercontent.com/u/15343250?v=4"),
+                      "https://firebasestorage.googleapis.com/v0/b/jhj-flutter-first.appspot.com/o/avatars%2F${widget.videoData.creatorUid}?alt=media"),
                   child: Text(
-                    "아이디",
-                    style: TextStyle(
+                    widget.videoData.creator,
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
                 ),
                 Gaps.v24,
-                const VideoButton(
-                  icon: FontAwesomeIcons.solidHeart,
-                  text: "2.9M",
+                VideoLikes(
+                  videoId: widget.videoData.id,
+                  likes: widget.videoData.likes,
                 ),
                 Gaps.v24,
                 GestureDetector(
                   onTap: () => _onCommentsTap(context),
-                  child: const VideoButton(
+                  child: VideoButton(
+                    color: Colors.white,
                     icon: FontAwesomeIcons.solidComment,
-                    text: "33K",
+                    text: "${widget.videoData.comments}",
                   ),
                 ),
                 Gaps.v24,
                 const VideoButton(
+                  color: Colors.white,
                   icon: FontAwesomeIcons.share,
                   text: "share",
                 ),
