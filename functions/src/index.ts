@@ -39,6 +39,24 @@ export const onLikedCreated = functions.firestore
         const db = admin.firestore();
         const [videoId, _] = snapshot.id.split("000");
         await db.collection("videos").doc(videoId).update({likes: admin.firestore.FieldValue.increment(1)});
+        // https://firebase.google.com/docs/reference/admin/node/firebase-admin.messaging.messaging
+        const video = (await (db.collection("videos").doc(videoId).get())).data();
+        if(video) {
+            const creatorUid = video.creatorUid;
+            const user = (await db.collection("users").doc(creatorUid).get()).data();
+            if(user) {
+                const token = user.token;
+                await admin.messaging().sendToDevice(token, {
+                    data: {
+                        screen: "123",
+                    },
+                    notification: {
+                        title: "someone liked your video",
+                        body: "Like + 1 ! congrats! 😍"
+                    },
+                });
+            }
+        }
     });
 
 
@@ -50,4 +68,6 @@ export const onLikedRemoved = functions.firestore
         const [videoId, _] = snapshot.id.split("000");
         await db.collection("videos").doc(videoId).update({likes: admin.firestore.FieldValue.increment(-1)});
     });
-    
+
+
+

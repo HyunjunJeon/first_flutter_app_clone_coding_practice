@@ -14,6 +14,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Flutter Engine 과 Widget 들을 결합시켜줌
 
   await Firebase.initializeApp(
+    // A Firebase App named "[DEFAULT]" already exists
+    // https://stackoverflow.com/questions/70812697/a-firebase-app-named-default-already-exists
+    name: "jhj-first-flutter-app",
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
@@ -48,6 +51,7 @@ class TikTokCloneApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // https://pub.dev/packages/provider#existing-providers
+    // ref.watch(notificationProvider(context)); // router 쪽에서 ShellRoute 를 활용해서 옮겨줌
     return MaterialApp.router(
       // iOS Emulator 에서 debug 글자 안보이게
       debugShowCheckedModeBanner: false,

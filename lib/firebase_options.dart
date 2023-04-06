@@ -52,6 +52,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '330331130378',
     projectId: 'jhj-flutter-first',
     authDomain: 'jhj-flutter-first.firebaseapp.com',
+    databaseURL:
+        'https://jhj-flutter-first-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'jhj-flutter-first.appspot.com',
     measurementId: 'G-S0S4SNBFXV',
   );
@@ -61,6 +63,8 @@ class DefaultFirebaseOptions {
     appId: '1:330331130378:android:763030d4f59e33810fedf3',
     messagingSenderId: '330331130378',
     projectId: 'jhj-flutter-first',
+    databaseURL:
+        'https://jhj-flutter-first-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'jhj-flutter-first.appspot.com',
   );
 
@@ -69,8 +73,11 @@ class DefaultFirebaseOptions {
     appId: '1:330331130378:ios:3681b7d15b9be2920fedf3',
     messagingSenderId: '330331130378',
     projectId: 'jhj-flutter-first',
+    databaseURL:
+        'https://jhj-flutter-first-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'jhj-flutter-first.appspot.com',
-    iosClientId: '330331130378-jvkei5l84qqrod9sqo1glenfglmptjfq.apps.googleusercontent.com',
+    iosClientId:
+        '330331130378-jvkei5l84qqrod9sqo1glenfglmptjfq.apps.googleusercontent.com',
     iosBundleId: 'org.study.jhj',
   );
 }
